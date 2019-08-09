@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_06_200158) do
+ActiveRecord::Schema.define(version: 2019_08_09_185850) do
 
   create_table "applicants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "caseid"
-    t.string "cellphonenumber"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "encrypted_caseid"
+    t.string "encrypted_cellphonenumber"
+    t.string "encrypted_caseid_iv"
+    t.string "encrypted_cellphonenumber_iv"
   end
 
 end
