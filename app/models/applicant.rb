@@ -1,5 +1,9 @@
 class Applicant < ApplicationRecord
+  @@CASEID_ENCRYPTION_KEY = Base64.decode64 ENV.fetch 'CASEID_ENCRYPTION_KEY'
+  @@CELLPHONENUMBER_ENCRYPTION_KEY = Base64.decode64 ENV.fetch 'CELLPHONENUMBER_ENCRYPTION_KEY'
+
   attr_encrypted_options.merge!(marshal: true, :allow_empty_value => true)
-  attr_encrypted :caseid, key: Base64.decode64('Q0Y9LHHPTFuCu/Cjn/FztKjsmoVVek8jrqaNkAZiwoo=\n')
-  attr_encrypted :cellphonenumber, key: Base64.decode64('9hEbxCqudwTj20XCafmQ1olK+J7BMJdiS44rq4IRsGg=\n')
+
+  attr_encrypted :caseid, key: @@CASEID_ENCRYPTION_KEY
+  attr_encrypted :cellphonenumber, key: @@CELLPHONENUMBER_ENCRYPTION_KEY
 end
