@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   db:
     image: mariadb
@@ -6,12 +6,19 @@ services:
       - "5432:5432"
     environment: 
       - MYSQL_ROOT_PASSWORD=password
+    networks:
+      - app
   web:
     build: .
     command: ./dev-start
     ports:
       - "3001:3001"
-    links:
+    depends_on:
       - db
+    networks:
+     - app
     volumes:
-      - .:/app
+    - .:/app
+
+networks:
+  app:
