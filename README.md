@@ -9,10 +9,9 @@
 ### 1. Create .env file with keys
 ```bash 
 cat << EOF > .env
-CASEID_ENCRYPTION_KEY=$(echo -n date | base64)
-CELLPHONENUMBER_ENCRYPTION_KEY=$(echo -n date | base64)
+CELLPHONENUMBER_ENCRYPTION_KEY=$(cat /dev/random | dd ibs=32 count=1 status=none | base64)
 EOF
 ```
 
 ### 2. Start docker
-docker-compose up -d 
+docker-compose up -d
