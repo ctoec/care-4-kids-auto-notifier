@@ -1,9 +1,17 @@
 #!/bin/bash 
 function dbIsDown { mysqladmin -h db -u root --password=password status  > /dev/null 2>&1 && echo "$?"; }
 while [ -z $(dbIsDown)  ]; do
-    echo "waiting for mysql to start working"
+    echo "waiting for application db to start working"
     sleep 3s
 done
+
+function dbIsDown { mysqladmin -h unitedwaydb -u root --password=password status  > /dev/null 2>&1 && echo "$?"; }
+while [ -z $(dbIsDown)  ]; do
+    echo "waiting for unitedway db to start working"
+    sleep 3s
+done
+
+mysql --host=unitedwaydb --user=root --password=password < unitedway_db_setup.sql
 
 # Remove a potentially pre-existing server.pid for Rails. This is a known issue.
 rm -f /app/tmp/pids/server.pid
