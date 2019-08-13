@@ -2,8 +2,6 @@ version: '3'
 services:
   db:
     image: mariadb
-    ports:
-      - "5432:5432"
     environment: 
       - MYSQL_ROOT_PASSWORD=password
     networks:
@@ -19,8 +17,15 @@ services:
       - db
     networks:
      - app
+     - unitedway
     volumes:
     - .:/app
-
+  unitedwaydb:
+    image: mariadb
+    environment: 
+      - MYSQL_ROOT_PASSWORD=password
+    networks:
+      - unitedway
 networks:
   app:
+  unitedway:
