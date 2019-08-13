@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_12_222203) do
+ActiveRecord::Schema.define(version: 2019_08_13_154600) do
 
   create_table "applicants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -18,6 +18,13 @@ ActiveRecord::Schema.define(version: 2019_08_12_222203) do
     t.string "encrypted_cellphonenumber"
     t.string "encrypted_cellphonenumber_iv"
     t.string "caseid"
+  end
+
+  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "encrypted_message_text"
+    t.string "encrypted_message_text_iv"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
