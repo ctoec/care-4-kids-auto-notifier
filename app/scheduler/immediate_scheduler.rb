@@ -1,7 +1,7 @@
 class ImmediateScheduler
   include Scheduler
 
-  def self.getNextTime(obj)
-    # TODO(stub)
+  def self.getNextTime(*_)
+    return Time.now
   end
 end
