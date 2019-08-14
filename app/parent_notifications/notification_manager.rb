@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class NotificationManager
-  def initialize(message_queue:, indexed_documents:)
+  def initialize(message_queue:, notification_generator:)
     @message_queue = message_queue
-    @indexed_documents = indexed_documents
+    @notification_generator = notification_generator
   end
 
   def run
-    @indexed_documents.fetch_last_hour { |message| @message_queue.put message }
+    @notification_generator.fetch_last_hour { |message| @message_queue.put message }
   end
 end

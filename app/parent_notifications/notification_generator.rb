@@ -2,7 +2,7 @@
 DocuclassEvent = Struct.new(:type, :caseid)
 NotificationEvent = Struct.new(:caseid, :notificationid)
 
-class IndexedDocuments
+class NotificationGenerator
     def initialize(docuclass_events:)
         @docuclass_events = docuclass_events
     end
