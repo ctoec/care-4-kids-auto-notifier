@@ -122,4 +122,36 @@ RSpec.describe NotificationQueue do
       expect(job).to have_received(:perform_later).at_most(quantity).times
     end
   end
+
+  describe 'when the scheduler returns a next time less than one second out' do
+    it '#perform_now is called' do
+      job = spy
+      sender = spy
+      scheduler = spy
+      allow(job).to receive(:perform_now)
+      allow(scheduler).to receive(:getNextTime).and_return(Time.now)
+      notification = spy
+
+      notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
+      notificiationQueue.put notification
+
+      expect(job).to have_received(:perform_now).exactly(:once)      
+    end
+  end
+
+  describe 'when the scheduler returns a next time more than one second out' do
+    it '#perform_later is called' do
+      job = spy
+      sender = spy
+      scheduler = spy
+      allow(job).to receive(:perform_later)
+      allow(scheduler).to receive(:getNextTime).and_return(Time.now + 10.minutes)
+      notification = spy
+
+      notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
+      notificiationQueue.put notification
+
+      expect(job).to have_received(:perform_later).exactly(:once)      
+    end
+  end
 end
