@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe NotificationQueue do
-  describe 'when constructor is supplied objects of type ApplicationJob, Sender, and Scheduler' do
+  context 'when constructor is supplied objects of type ApplicationJob, Sender, and Scheduler' do
     it do
       job = double
       sender = double
@@ -15,7 +15,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when constructor is supplied objects of all invalid types' do
+  context 'when constructor is supplied objects of all invalid types' do
     it do
       job = double
       sender = double
@@ -29,7 +29,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when constructor is supplied objects with only ApplicationJob correct' do
+  context 'when constructor is supplied objects with only ApplicationJob correct' do
     it do
       job = double
       sender = double
@@ -43,7 +43,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when constructor is supplied objects with only Sender correct' do
+  context 'when constructor is supplied objects with only Sender correct' do
     it do
       job = double
       sender = double
@@ -57,7 +57,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when constructor is supplied objects with only Scheduler correct' do
+  context 'when constructor is supplied objects with only Scheduler correct' do
     it do
       job = double
       sender = double
@@ -71,7 +71,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when no notifications are given' do
+  context 'when no notifications are given' do
     it '#perform_(later|now) is called zero times' do
       job = spy
       sender = spy
@@ -86,7 +86,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when one notification is given' do
+  context 'when one notification is given' do
     it '#perform_(later|now) is called at most one time' do
       job = spy
       sender = spy
@@ -103,7 +103,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when several notifications are given' do
+  context 'when several notifications are given' do
     it '#perform_(later|now) is called no more than the same number of times' do
       job = spy
       sender = spy
@@ -123,7 +123,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when the scheduler returns a next time less than one second out' do
+  context 'when the scheduler returns a next time less than one second out' do
     it '#perform_now is called' do
       job = spy
       sender = spy
@@ -139,7 +139,7 @@ RSpec.describe NotificationQueue do
     end
   end
 
-  describe 'when the scheduler returns a next time more than one second out' do
+  context 'when the scheduler returns a next time more than one second out' do
     it '#perform_later is called' do
       job = spy
       sender = spy

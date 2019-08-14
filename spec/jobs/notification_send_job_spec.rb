@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe NotificationSendJob, :type => :job do
-  describe 'when a notification event is supplied' do  
+  context 'when a notification event is supplied' do  
     it '.perform is called with the corresponding message and cell phone numbers' do
       message_text = 'This is a message'
       to_number = '+1234567890'
