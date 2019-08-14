@@ -11,7 +11,17 @@ while [ -z $(dbIsDown)  ]; do
     sleep 3s
 done
 
-mysql --host=unitedwaydb --user=root --password=password < unitedway_db_setup.sql
+mysql --host=unitedwaydb --user=root --password=password << EOF
+CREATE DATABASE IF NOT EXISTS ${UNITEDWAYDB_DATABASE};
+
+CREATE USER IF NOT EXISTS '${UNITEDWAYDB_USERNAME}'@'%' IDENTIFIED BY '${UNITEDWAYDB_PASSWORD}';
+GRANT SELECT ON  ${UNITEDWAYDB_DATABASE} . * TO   '${UNITEDWAYDB_USERNAME}'@'%';
+
+USE ${UNITEDWAYDB_DATABASE};
+
+CREATE TABLE IF NOT EXISTS docuclass_indexed ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
+CREATE TABLE IF NOT EXISTS impact_indexed ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
+EOF
 
 # Remove a potentially pre-existing server.pid for Rails. This is a known issue.
 rm -f /app/tmp/pids/server.pid

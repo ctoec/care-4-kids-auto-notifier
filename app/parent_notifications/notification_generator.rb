@@ -1,5 +1,4 @@
 
-DocuclassEvent = Struct.new(:type, :caseid)
 NotificationEvent = Struct.new(:caseid, :notificationid)
 
 class NotificationGenerator
@@ -20,5 +19,4 @@ class NotificationGenerator
         )
         NotificationEvent.new(event.caseid, notification.id)
     end
-
 end
