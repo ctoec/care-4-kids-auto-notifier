@@ -7,7 +7,7 @@ RSpec.describe NotificationGenerator do
             it 'returns a notification event with the correct case id' do
                 caseid = (rand 100).to_s  
                 docuclass_events = build_docuclass_events_stub(parents: [
-                    Applicant.create(caseid: caseid, cellphonenumber: '5555555555')
+                    Applicant.create(caseid: caseid, cellphonenumber: '+5555555555')
                 ])
                 
                 notification_generator = NotificationGenerator.new docuclass_events: docuclass_events
@@ -19,7 +19,7 @@ RSpec.describe NotificationGenerator do
             it 'returns a notification event with a notification id that is linked stored notification with message text' do
                 caseid = (rand 100).to_s  
                 docuclass_events = build_docuclass_events_stub(parents: [
-                    Applicant.create(caseid: caseid, cellphonenumber: '5555555555')
+                    Applicant.create(caseid: caseid, cellphonenumber: '+5555555555')
                 ])
                 notification_generator = NotificationGenerator.new docuclass_events: docuclass_events
                 
@@ -33,8 +33,8 @@ RSpec.describe NotificationGenerator do
         context 'there are multiple events that have corresponding parents' do 
             it 'returns all the notification events' do
                 docuclass_events = build_docuclass_events_stub(parents: [
-                    Applicant.create(caseid: 'x', cellphonenumber: '5555555555'),
-                    Applicant.create(caseid: 'y', cellphonenumber: '5555555555')
+                    Applicant.create(caseid: 'x', cellphonenumber: '+5555555555'),
+                    Applicant.create(caseid: 'y', cellphonenumber: '+5555555555')
                 ])
                 notification_generator = NotificationGenerator.new docuclass_events: docuclass_events
                 
@@ -45,9 +45,9 @@ RSpec.describe NotificationGenerator do
 
         context 'there are multiple events and some do not have a corresponding parents' do 
             it 'returns only the notification events that correspond to a parent' do
-                Applicant.create(caseid: 'x', cellphonenumber: '5555555555')
+                Applicant.create(caseid: 'x', cellphonenumber: '+5555555555')
                 docuclass_events = build_docuclass_events_stub(parents: [
-                    Applicant.create(caseid: 'y', cellphonenumber: '5555555555')
+                    Applicant.create(caseid: 'y', cellphonenumber: '+5555555555')
                 ])
 
                 notification_generator = NotificationGenerator.new docuclass_events: docuclass_events
