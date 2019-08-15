@@ -15,9 +15,12 @@ services:
       - ./.env
     depends_on:
       - db
+      - unitedwaydb
+      - docuclassdb
     networks:
      - app
      - unitedway
+     - docuclass
     volumes:
     - .:/app
   unitedwaydb:
@@ -26,6 +29,14 @@ services:
       - MYSQL_ROOT_PASSWORD=password
     networks:
       - unitedway
+  docuclassdb:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=A*Strong@Password!
+    networks:
+      - docuclass
 networks:
   app:
   unitedway:
+  docuclass:

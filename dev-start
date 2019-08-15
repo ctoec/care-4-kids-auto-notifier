@@ -5,8 +5,8 @@ while [ -z $(dbIsDown)  ]; do
     sleep 3s
 done
 
-function dbIsDown { mysqladmin -h unitedwaydb -u root --password=password status  > /dev/null 2>&1 && echo "$?"; }
-while [ -z $(dbIsDown)  ]; do
+function unitedwaydbIsDown { mysqladmin -h unitedwaydb -u root --password=password status  > /dev/null 2>&1 && echo "$?"; }
+while [ -z $(unitedwaydbIsDown)  ]; do
     echo "waiting for unitedway db to start working"
     sleep 3s
 done
@@ -22,6 +22,52 @@ USE ${UNITEDWAYDB_DATABASE};
 CREATE TABLE IF NOT EXISTS docuclass_indexed ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
 CREATE TABLE IF NOT EXISTS impact_indexed ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
 EOF
+
+function docuclassdbIsDown { sqlcmd -S docuclassdb -U SA -P "A*Strong@Password!" -Q "EXEC sp_databases"  > /dev/null 2>&1 && echo "$?"; }
+while [ -z $(unitedwaydbIsDown)  ]; do
+    echo "waiting for docuclass db to start working"
+    sleep 3s
+done
+
+
+sqlSeverSetup=$(cat <<EOF
+DROP TABLE IF EXISTS unitedway.docuclass_indexed;
+GO
+
+DROP SCHEMA IF EXISTS unitedway;
+GO
+
+CREATE SCHEMA unitedway;
+GO
+
+CREATE TABLE unitedway.docuclass_indexed (
+    caseid VARCHAR (20) NOT NULL,
+    document_type VARCHAR (20) NOT NULL,
+    index_date DATETIME NOT NULL,
+);
+
+DROP LOGIN ${DOCUCLASS_USERNAME};
+GO
+
+DROP USER ${DOCUCLASS_USERNAME};
+GO
+
+CREATE LOGIN ${DOCUCLASS_USERNAME} WITH PASSWORD = '${DOCUCLASS_PASSWORD}'
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'${DOCUCLASS_USERNAME}')
+BEGIN
+    CREATE USER [${DOCUCLASS_USERNAME}] FOR LOGIN [${DOCUCLASS_USERNAME}]
+END;
+GO
+
+GRANT SELECT ON OBJECT::unitedway.docuclass_indexed  
+    TO ${DOCUCLASS_USERNAME};
+GO  
+EOF
+)
+sqlcmd -S docuclassdb -U SA -P "A*Strong@Password!" -Q "$sqlSeverSetup"
+
 
 # Remove a potentially pre-existing server.pid for Rails. This is a known issue.
 rm -f /app/tmp/pids/server.pid
