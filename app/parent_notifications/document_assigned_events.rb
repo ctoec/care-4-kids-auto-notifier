@@ -1,6 +1,6 @@
-DocuclassEvent = Struct.new(:caseid, :type, :date)
+DocumentAssignedEvent = Struct.new(:caseid, :type, :date)
 
-class DocuclassEvents
+class DocumentAssignedEvents
     @@client = Mysql2::Client.new(
         host: ENV.fetch('UNITEDWAYDB_HOST'),
         username: ENV.fetch('UNITEDWAYDB_USERNAME'),
@@ -15,7 +15,7 @@ class DocuclassEvents
             WHERE index_date >= DATE_SUB(NOW(),INTERVAL 1 HOUR);
         SQL
         @@client.prepare(query).execute.map do |row|
-            DocuclassEvent.new(
+            DocumentAssignedEvent.new(
                 row["caseid"], 
                 row["document_type"], 
                 row["index_date"]
