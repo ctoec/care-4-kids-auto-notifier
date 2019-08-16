@@ -68,7 +68,7 @@ end
 def build_docuclass_events_stub(parents:)
     docuclass_events = double
     events = parents.map do |parent|
-        DocuclassEvent.new(parent.caseid, 'some doc', Time.now)
+        DocumentAssignedEvent.new(parent.caseid, 'some doc', Time.now)
     end
     allow(docuclass_events).to receive(:fetch_last_hour).and_return events
     return docuclass_events
