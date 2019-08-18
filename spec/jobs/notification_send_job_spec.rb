@@ -5,7 +5,6 @@ RSpec.describe NotificationSendJob, :type => :job do
     it '.perform is called with the corresponding message and cell phone numbers' do
       message_text = 'This is a message'
       to_number = '+1234567890'
-      from_number = nil # Because ENV is not configured
       
       sender = double
       allow(sender).to receive(:createMessage)
@@ -25,7 +24,7 @@ RSpec.describe NotificationSendJob, :type => :job do
       NotificationSendJob.perform_now(sender, notification_event)
 
       expect(sender).to have_received(:createMessage).exactly(:once)
-      expect(sender).to have_received(:createMessage).with(message_text: message_text, to_number: to_number, from_number: from_number)
+      expect(sender).to have_received(:createMessage).with(message_text: message_text, to_number: to_number)
     end
   end
 end
