@@ -5,8 +5,8 @@ class NotificationGenerator
     @docuclass_events = docuclass_events
   end
 
-  def fetch_last_hour
-    @docuclass_events.fetch_last_hour.each do |event|
+  def fetch_new
+    @docuclass_events.fetch_new.each do |event|
       found_parent = Applicant.where(caseid: event.caseid).first
       yield build_notification_event(event: event) unless found_parent.nil?
     end
