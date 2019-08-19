@@ -52,8 +52,8 @@ RSpec.describe DocumentAssignedEvents do
       it 'fetches only the events that have a timestamp of last hour' do
         insert_command = @client.prepare(INSERT_STATEMENT)
         current_time = Time.now
+        insert_command.execute('1235', 'doc type 1', current_time - 2.hours)
         insert_command.execute('1234', 'doc type 1', current_time)
-        insert_command.execute('1235', 'doc type 1', Time.new(2010, 1, 1))
         expect(DocumentAssignedEvents.fetch_last_hour.length).to eql 1
       end
     end
