@@ -5,7 +5,7 @@ RSpec.describe NotificationManager do
     it 'enqueues a message' do
       message_queue = spy
       notification_generator = double
-      allow(notification_generator).to receive(:fetch_last_hour)
+      allow(notification_generator).to receive(:fetch_new)
         .and_yield('fake message 1')
       notification_manager = NotificationManager.new message_queue: message_queue, notification_generator: notification_generator
       notification_manager.run
@@ -15,7 +15,7 @@ RSpec.describe NotificationManager do
     it 'enqueues multiple messages' do
       message_queue = spy
       notification_generator = double
-      allow(notification_generator).to receive(:fetch_last_hour)
+      allow(notification_generator).to receive(:fetch_new)
         .and_yield('fake message 1')
         .and_yield('fake message 2')
         .and_yield('fake message 3')
