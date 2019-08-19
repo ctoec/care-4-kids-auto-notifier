@@ -1,14 +1,15 @@
-#!/bin/bash 
+#!/bin/bash
+
 function mysqlDbIsDown { mysqladmin -h $1 -u $2 --password=$3 status > /dev/null 2>&1 && echo "$?"; }
 
 while [ -z $(mysqlDbIsDown db root password)  ]; do
     echo "waiting for application db to start working"
-    sleep 3s
+    sleep 5s
 done
 
 while [ -z $(mysqlDbIsDown unitedwaydb root password)  ]; do
     echo "waiting for unitedway db to start working"
-    sleep 3s
+    sleep 5s
 done
 
 mysql --host=unitedwaydb --user=root --password=password << EOF
@@ -26,7 +27,7 @@ EOF
 function docuclassdbIsDown { sqlcmd -S docuclassdb -U SA -P "A*Strong@Password!" -Q "EXEC sp_databases"  > /dev/null 2>&1 && echo "$?"; }
 while [ -z $(unitedwaydbIsDown)  ]; do
     echo "waiting for docuclass db to start working"
-    sleep 3s
+    sleep 5s
 done
 
 

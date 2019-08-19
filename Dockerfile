@@ -16,9 +16,8 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     unixodbc-dev
 # Requirements to install mssql-tools properly
 # https://github.com/Microsoft/mssql-docker/issues/163
-RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile && \
-    echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc && \
-    echo "nb_NO.UTF-8 UTF-8" > /etc/locale.gen && \
+ENV PATH="/opt/mssql-tools/bin:${PATH}"
+RUN echo "nb_NO.UTF-8 UTF-8" > /etc/locale.gen && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen
 ENV APP_HOME /app
