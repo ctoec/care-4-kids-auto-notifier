@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe NotificationGenerator do
-  describe 'fetch_last_hour' do
+  describe 'fetch_new' do
     context 'there is an event that matches a parent' do
       it 'returns a notification event with the correct case id' do
         caseid = (rand 100).to_s
@@ -60,7 +60,7 @@ end
 
 def fetch_all_last_hour(notification_generator)
   notification_events = []
-  notification_generator.fetch_last_hour { |n| notification_events.push n }
+  notification_generator.fetch_new { |n| notification_events.push n }
   notification_events
 end
 
@@ -69,6 +69,6 @@ def build_docuclass_events_stub(parents:)
   events = parents.map do |parent|
     DocumentAssignedEvent.new(parent.caseid, 'some doc', Time.now)
   end
-  allow(docuclass_events).to receive(:fetch_last_hour).and_return events
+  allow(docuclass_events).to receive(:fetch_new).and_return events
   return docuclass_events
 end
