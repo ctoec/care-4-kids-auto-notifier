@@ -6,11 +6,6 @@ class NotificationQueue
   end
 
   def put(notification_event)
-    send_time = @scheduler.getNextTime
-    if (send_time < Time.now + 1.second) then
-      @job.perform_now(@sender, notification_event)
-    else
-      @job.set(wait_until: send_time).perform_later(@sender, notification_event)
-    end
+    @scheduler.schedule(@job, @sender, notification_event)
   end
 end

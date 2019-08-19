@@ -2,44 +2,39 @@ require 'rails_helper'
 
 RSpec.describe NotificationQueue do
   context 'when no notifications are given' do
-    it '#perform_(later|now) is called zero times' do
+    it '.schedulle is called zero times' do
       job = spy
       sender = spy
       scheduler = spy
-      allow(job).to receive(:perform_now)
-      allow(job).to receive(:perform_later)
+      allow(scheduler).to receive(:schedule)
 
       notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
       
-      expect(job).to have_received(:perform_now).exactly(0).times
-      expect(job).to have_received(:perform_later).exactly(0).times
+      expect(scheduler).to have_received(:schedule).exactly(0).times
     end
   end
 
   context 'when one notification is given' do
-    it '#perform_(later|now) is called at most one time' do
+    it '.schedule is called at exactly one time' do
       job = spy
       sender = spy
       scheduler = spy
-      allow(job).to receive(:perform_now)
-      allow(job).to receive(:perform_later)
+      allow(scheduler).to receive(:schedule)
       notification = spy
 
       notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
       notificiationQueue.put notification
 
-      expect(job).to have_received(:perform_now).at_most(:once)
-      expect(job).to have_received(:perform_later).at_most(:once)
+      expect(scheduler).to have_received(:schedule).exactly(:once)
     end
   end
 
   context 'when several notifications are given' do
-    it '#perform_(later|now) is called no more than the same number of times' do
+    it '.schedule is called exactly the same number of times' do
       job = spy
       sender = spy
       scheduler = spy
-      allow(job).to receive(:perform_now)
-      allow(job).to receive(:perform_later)
+      allow(scheduler).to receive(:schedule)
       notification = spy
       quantity = rand(1..20)
 
@@ -48,40 +43,7 @@ RSpec.describe NotificationQueue do
         notificiationQueue.put notification
       end
 
-      expect(job).to have_received(:perform_now).at_most(quantity).times
-      expect(job).to have_received(:perform_later).at_most(quantity).times
-    end
-  end
-
-  context 'when the scheduler returns a next time less than one second out' do
-    it '#perform_now is called' do
-      job = spy
-      sender = spy
-      scheduler = spy
-      allow(job).to receive(:perform_now)
-      allow(scheduler).to receive(:getNextTime).and_return(Time.now)
-      notification = spy
-
-      notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
-      notificiationQueue.put notification
-
-      expect(job).to have_received(:perform_now).exactly(:once)      
-    end
-  end
-
-  context 'when the scheduler returns a next time more than one second out' do
-    it '#perform_later is called' do
-      job = spy
-      sender = spy
-      scheduler = spy
-      allow(job).to receive(:perform_later)
-      allow(scheduler).to receive(:getNextTime).and_return(Time.now + 10.minutes)
-      notification = spy
-
-      notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
-      notificiationQueue.put notification
-
-      expect(job).to have_received(:perform_later).exactly(:once)      
+      expect(scheduler).to have_received(:schedule).exactly(quantity).times
     end
   end
 end
