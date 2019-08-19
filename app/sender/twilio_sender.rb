@@ -1,7 +1,6 @@
 require 'twilio-ruby'
 
 class TwilioSender
-  include Sender
 
   @@account_sid = ENV.fetch 'TWILIO_ACCOUNT_SID'
   @@auth_token = ENV.fetch 'TWILIO_AUTH_TOKEN'
