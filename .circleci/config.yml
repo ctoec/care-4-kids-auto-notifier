@@ -38,12 +38,12 @@ jobs:
                 echo "waiting for mysql to start working"
                 sleep 5s
             done
+      
       - run:
           name: setup database
           command: |
-            bundle exec rake db:create
-            bundle exec rake db:schema:load
-
+            ./scripts/setupRailsDatabase
+            ./scripts/setupUWDatabase
       - run:
           name: run tests
           command: |
