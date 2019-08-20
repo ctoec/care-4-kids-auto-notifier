@@ -6,6 +6,7 @@ services:
       - MYSQL_ROOT_PASSWORD=password
     networks:
       - app
+      - jobs
   web:
     build: .
     command: ./scripts/dev-start
@@ -18,6 +19,19 @@ services:
     networks:
      - app
      - unitedway
+     - jobs
+    volumes:
+    - .:/app
+  jobs_runner:
+    build: .
+    command: bash -c "RAILS_ENV=${RAILS_ENV:-development} bin/delayed_job run"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    networks: 
+      - app
+      - jobs
     volumes:
     - .:/app
   unitedwaydb:
@@ -29,3 +43,4 @@ services:
 networks:
   app:
   unitedway:
+  jobs:
