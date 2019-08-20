@@ -19,7 +19,7 @@ GRANT SELECT ON  ${UNITEDWAYDB_DATABASE} . * TO   '${UNITEDWAYDB_USERNAME}'@'%';
 
 USE ${UNITEDWAYDB_DATABASE};
 
-CREATE TABLE IF NOT EXISTS docuclass_indexed ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
+CREATE TABLE IF NOT EXISTS document_assigned_index ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
 CREATE TABLE IF NOT EXISTS impact_indexed ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
 EOF
 
