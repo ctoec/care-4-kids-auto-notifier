@@ -3,11 +3,8 @@ development: &default
   database: backbone_data_bootstrap_development
   min_messages: WARNING
   pool: 5
-  username: root
-  password: password
-  host: db
+  url: <%= ENV['DATABASE_URL'] %>
 
 test:
   <<: *default
   database: backbone_data_bootstrap_test
-  host: 127.0.0.1
