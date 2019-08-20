@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-INSERT_STATEMENT = 'INSERT INTO docuclass_indexed(caseid, document_type, index_date) VALUES (?, ?, ?);'
+INSERT_STATEMENT = 'INSERT INTO document_assigned_index(caseid, document_type, index_date) VALUES (?, ?, ?);'
 
 RSpec.describe DocumentAssignedEvents do
   before(:all) do
@@ -16,7 +16,7 @@ RSpec.describe DocumentAssignedEvents do
 
   before(:each) do
     EventCursor.create(key: 'document_assigned_event', time: Time.now)
-    @client.prepare('DELETE FROM docuclass_indexed;').execute
+    @client.prepare('DELETE FROM document_assigned_index;').execute
   end
 
   describe 'fetch_new' do
