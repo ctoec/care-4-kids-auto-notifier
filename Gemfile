@@ -7,8 +7,6 @@ ruby '2.6.3'
 gem 'rails', '~> 6.0.0'
 # Use mariadb (mysql-clone) as the database for Active Record
 gem 'mysql2'
-# Use rspec for testing
-gem 'rspec-rails'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use attr_encrypted to provide encryption at rest
@@ -40,6 +38,8 @@ group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
+  gem 'rspec-rails'
+  gem "rspec_junit_formatter"
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
 end

@@ -10,3 +10,4 @@ development: &default
 test:
   <<: *default
   database: backbone_data_bootstrap_test
+  host: 127.0.0.1
