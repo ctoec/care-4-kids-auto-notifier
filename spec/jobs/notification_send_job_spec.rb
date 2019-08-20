@@ -1,8 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe NotificationSendJob, :type => :job do
+  before(:each) do
+    ApplicantCache = Applicant
+    NotificationCache = Notification
+  end
+  
+  after(:each) do
+    Applicant = ApplicantCache
+    Notification = NotificationCache
+  end
+
   context 'when a notification event is supplied' do  
     it '.perform is called with the corresponding message and cell phone numbers' do
+      
       message_text = 'This is a message'
       to_number = '+1234567890'
       
@@ -13,8 +24,8 @@ RSpec.describe NotificationSendJob, :type => :job do
       
       parent = double
       allow(parent).to receive(:cellphonenumber).and_return(to_number)
-      Parent = double
-      allow(Parent).to receive(:find_by).and_return(parent)
+      Applicant = double
+      allow(Applicant).to receive(:find_by).and_return(parent)
 
       notification = double
       allow(notification).to receive(:message_text).and_return(message_text)
