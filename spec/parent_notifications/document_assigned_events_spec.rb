@@ -7,10 +7,10 @@ INSERT_STATEMENT = 'INSERT INTO document_assigned_index(caseid, document_type, i
 RSpec.describe DocumentAssignedEvents do
   before(:all) do
     @client = Mysql2::Client.new(
-      host: 'unitedwaydb',
-      username: 'root',
-      password: 'password',
-      database: 'unitedwayetl'
+      host: ENV.fetch('UNITEDWAYDB_HOST'),
+      username: ENV.fetch('UNITEDWAYDB_ADMIN_USERNAME'),
+      password: ENV.fetch('UNITEDWAYDB_ADMIN_PASSWORD'),
+      database: ENV.fetch('UNITEDWAYDB_DATABASE')
     )
   end
 
