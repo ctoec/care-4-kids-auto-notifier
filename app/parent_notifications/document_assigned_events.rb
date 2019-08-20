@@ -11,7 +11,7 @@ class DocumentAssignedEvents
   def self.fetch_new
     query = <<-SQL
             SELECT *
-            FROM docuclass_indexed
+            FROM document_assigned_index
             WHERE index_date >= ?;
     SQL
     @@client

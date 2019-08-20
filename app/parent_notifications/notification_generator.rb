@@ -1,12 +1,12 @@
 NotificationEvent = Struct.new(:caseid, :notificationid)
 
 class NotificationGenerator
-  def initialize(docuclass_events:)
-    @docuclass_events = docuclass_events
+  def initialize(document_assigned_events:)
+    @document_assigned_events = document_assigned_events
   end
 
   def fetch_new
-    @docuclass_events.fetch_new.each do |event|
+    @document_assigned_events.fetch_new.each do |event|
       found_parent = Applicant.where(caseid: event.caseid).first
       yield build_notification_event(event: event) unless found_parent.nil?
     end
