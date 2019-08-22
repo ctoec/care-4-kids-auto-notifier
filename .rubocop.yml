@@ -1,0 +1,13 @@
+# Commonly used screens these days easily fit more than 80 characters.
+Metrics/LineLength:
+  Max: 120
+
+AllCops:
+  Exclude:
+    - 'spec/*_helper.rb'
+    - db/**/*
+    - config/**/*
+    - bin/*
+    - Gemfile
+    - Rakefile
+    - Gemfile.lock
