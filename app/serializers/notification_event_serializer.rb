@@ -1,3 +1,5 @@
+# It is not entirely clear why this serializer is necessary.
+# See https://github.com/ctoec/care-4-kids-auto-notifier/issues/19
 class NotificationEventSerializer < ActiveJob::Serializers::ObjectSerializer
   def serialize?(arg)
     arg.is_a? NotificationEvent
