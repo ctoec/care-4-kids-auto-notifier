@@ -1,7 +1,6 @@
 require 'twilio-ruby'
 
 class TwilioSender
-
   @@account_sid = ENV.fetch 'TWILIO_ACCOUNT_SID'
   @@auth_token = ENV.fetch 'TWILIO_AUTH_TOKEN'
   @@from = ENV.fetch 'C4K_SMS_NUMBER'

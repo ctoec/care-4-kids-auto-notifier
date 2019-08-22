@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe NotificationSendJob, :type => :job do
-  context 'when a notification event is supplied' do  
+  context 'when a notification event is supplied' do
     it '.perform is called with the corresponding message and cell phone numbers' do
       message_text = 'This is a message'
       cellphonenumber = '+1234567890'
@@ -21,6 +21,4 @@ RSpec.describe NotificationSendJob, :type => :job do
       expect(sender).to have_received(:createMessage).with(message_text: message_text, to_number: cellphonenumber)
     end
   end
-
-  
 end

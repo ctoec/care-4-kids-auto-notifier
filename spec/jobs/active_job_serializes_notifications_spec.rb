@@ -49,7 +49,7 @@ RSpec.describe NotificationSendJob do
       allow(notification).to receive(:message_text).and_return(message_text)
       Notification = double
       allow(Notification).to receive(:find).and_return(notification)
-      
+
       notification_event = NotificationEvent.new(caseid, notificationid)
 
       expect(Sender.count).to eq 0

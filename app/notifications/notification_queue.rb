@@ -1,8 +1,8 @@
 class NotificationQueue
   def initialize(job:, sender:, scheduler:)
-      @job = job
-      @sender = sender
-      @scheduler = scheduler
+    @job = job
+    @sender = sender
+    @scheduler = scheduler
   end
 
   def put(notification_event)

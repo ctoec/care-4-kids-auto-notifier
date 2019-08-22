@@ -56,7 +56,7 @@ RSpec.describe DocumentAssignedEvents do
 
     context 'there is are events that did not happen in the last hour' do
       it 'fetches only the events that happened after cursor date' do
-        EventCursor.document_assigned_events_cursor =  Time.now
+        EventCursor.document_assigned_events_cursor = Time.now
 
         insert_command = @client.prepare(INSERT_STATEMENT)
         insert_command.execute('1235', 'doc type 1',  Time.now - 1.hours)

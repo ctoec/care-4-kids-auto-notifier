@@ -9,7 +9,7 @@ RSpec.describe NotificationQueue do
       allow(scheduler).to receive(:schedule)
 
       notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
-      
+
       expect(scheduler).to have_received(:schedule).exactly(0).times
     end
   end
