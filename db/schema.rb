@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_19_173351) do
+ActiveRecord::Schema.define(version: 2019_08_20_012802) do
 
   create_table "applicants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -18,13 +18,6 @@ ActiveRecord::Schema.define(version: 2019_08_19_173351) do
     t.string "encrypted_cellphonenumber"
     t.string "encrypted_cellphonenumber_iv"
     t.string "caseid"
-  end
-
-  create_table "event_cursors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "key"
-    t.datetime "time"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "delayed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -42,10 +35,18 @@ ActiveRecord::Schema.define(version: 2019_08_19_173351) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "event_cursors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "key"
+    t.datetime "time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "encrypted_message_text"
     t.string "encrypted_message_text_iv"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
 end

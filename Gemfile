@@ -15,7 +15,7 @@ gem "attr_encrypted", "~> 3.1.0"
 gem "twilio-ruby", "~> 5.25"
 # Jobs runner gems
 gem "daemons", "~> 1.3"
-gem "delayed_job_active_record", "~> 4.1.3"
+gem "delayed_job_active_record", "~> 4.1.4"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

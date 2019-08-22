@@ -24,7 +24,7 @@ services:
     - .:/app
   jobs_runner:
     build: .
-    command: bash -c "RAILS_ENV=${RAILS_ENV:-development} bin/delayed_job run"
+    command: bash -c "bundle update && RAILS_ENV=${RAILS_ENV:-development} bin/delayed_job run"
     env_file:
       - ./.env
     depends_on:
