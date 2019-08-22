@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe NotificationManager do
@@ -7,7 +9,9 @@ RSpec.describe NotificationManager do
       notification_generator = double
       allow(notification_generator).to receive(:fetch_all_new)
         .and_yield('fake message 1')
-      notification_manager = NotificationManager.new message_queue: message_queue, notification_generator: notification_generator
+      notification_manager = NotificationManager.new(
+        message_queue: message_queue, notification_generator: notification_generator
+      )
       notification_manager.run
       expect(message_queue).to have_received(:put).with('fake message 1')
     end
@@ -20,7 +24,10 @@ RSpec.describe NotificationManager do
         .and_yield('fake message 2')
         .and_yield('fake message 3')
 
-      notification_manager = NotificationManager.new message_queue: message_queue, notification_generator: notification_generator
+      notification_manager = NotificationManager.new(
+        message_queue: message_queue,
+        notification_generator: notification_generator
+      )
       notification_manager.run
       expect(message_queue).to have_received(:put).exactly(3).times
     end

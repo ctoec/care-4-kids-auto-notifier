@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 NotificationEvent = Struct.new(:caseid, :notificationid)
 
 class NotificationGenerator
@@ -14,7 +16,7 @@ class NotificationGenerator
 
   def build_notification_event(event:)
     notification = Notification.create(
-      message_text: "We have received document #{event.type}",
+      message_text: "We have received document #{event.type}"
     )
     NotificationEvent.new(event.caseid, notification.id)
   end

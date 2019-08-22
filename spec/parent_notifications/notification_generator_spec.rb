@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe NotificationGenerator do
@@ -27,9 +29,8 @@ RSpec.describe NotificationGenerator do
         )
 
         notification_events = fetch_all_new notification_generator
-        notificationid = notification_events.first.notificationid
         stored_notification = Notification.last
-        expect(stored_notification.message_text).to eql "We have received document some doc"
+        expect(stored_notification.message_text).to eql 'We have received document some doc'
       end
     end
 
@@ -77,5 +78,5 @@ def build_document_assigned_events_stub(parents:)
     DocumentAssignedEvent.new(parent.caseid, 'some doc', Time.now)
   end
   allow(document_assigned_events).to receive(:fetch_all_new).and_return events
-  return document_assigned_events
+  document_assigned_events
 end

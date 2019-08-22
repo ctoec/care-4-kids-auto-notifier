@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 DocumentAssignedEvent = Struct.new(:caseid, :type, :date)
 
 class DocumentAssignedEvents
@@ -22,9 +24,9 @@ class DocumentAssignedEvents
 
   def self.build_event(row)
     DocumentAssignedEvent.new(
-      row["caseid"],
-      row["document_type"],
-      row["index_date"]
+      row['caseid'],
+      row['document_type'],
+      row['index_date']
     )
   end
 end

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe NotificationSendJob, :type => :job do
+RSpec.describe NotificationSendJob do
   context 'when a notification event is supplied' do
     it '.perform is called with the corresponding message and cell phone numbers' do
       message_text = 'This is a message'

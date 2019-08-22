@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe NotificationQueue do
@@ -8,7 +10,7 @@ RSpec.describe NotificationQueue do
       scheduler = spy
       allow(scheduler).to receive(:schedule)
 
-      notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
+      notificiation_queue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
 
       expect(scheduler).to have_received(:schedule).exactly(0).times
     end
@@ -22,8 +24,8 @@ RSpec.describe NotificationQueue do
       allow(scheduler).to receive(:schedule)
       notification = spy
 
-      notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
-      notificiationQueue.put notification
+      notificiation_queue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
+      notificiation_queue.put notification
 
       expect(scheduler).to have_received(:schedule).exactly(:once)
     end
@@ -38,9 +40,9 @@ RSpec.describe NotificationQueue do
       notification = spy
       quantity = rand(1..20)
 
-      notificiationQueue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
+      notificiation_queue = NotificationQueue.new(job: job, sender: sender, scheduler: scheduler)
       quantity.times do
-        notificiationQueue.put notification
+        notificiation_queue.put notification
       end
 
       expect(scheduler).to have_received(:schedule).exactly(quantity).times

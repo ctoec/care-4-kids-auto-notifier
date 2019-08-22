@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'twilio-ruby'
 
 class TwilioSender
@@ -8,7 +10,7 @@ class TwilioSender
   @@client = Twilio::REST::Client.new(@@account_sid, @@auth_token)
 
   def self.createMessage(message_text:, to_number:)
-    return @@client.messages.create(
+    @@client.messages.create(
       from: @@from,
       to: :to_number,
       body: :message_text

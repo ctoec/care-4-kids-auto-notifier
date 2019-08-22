@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UninitializedClassSerializer < ActiveJob::Serializers::ObjectSerializer
   def serialize?(arg)
     arg.is_a? Class
@@ -5,11 +7,11 @@ class UninitializedClassSerializer < ActiveJob::Serializers::ObjectSerializer
 
   def serialize(klass)
     super(
-      "classname" => klass.to_s
+      'classname' => klass.to_s
     )
   end
 
   def deserialize(hash)
-    Object.const_get(hash["classname"])
+    Object.const_get(hash['classname'])
   end
 end

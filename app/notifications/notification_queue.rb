@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NotificationQueue
   def initialize(job:, sender:, scheduler:)
     @job = job

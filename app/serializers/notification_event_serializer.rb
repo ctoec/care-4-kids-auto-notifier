@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # It is not entirely clear why this serializer is necessary.
 # See https://github.com/ctoec/care-4-kids-auto-notifier/issues/19
 class NotificationEventSerializer < ActiveJob::Serializers::ObjectSerializer
@@ -7,12 +9,12 @@ class NotificationEventSerializer < ActiveJob::Serializers::ObjectSerializer
 
   def serialize(notification_event)
     super(
-      "caseid" => notification_event.caseid,
-      "notificationid" => notification_event.notificationid
+      'caseid' => notification_event.caseid,
+      'notificationid' => notification_event.notificationid
     )
   end
 
   def deserialize(hash)
-    NotificationEvent.new(hash["caseid"], hash["notificationid"])
+    NotificationEvent.new(hash['caseid'], hash['notificationid'])
   end
 end

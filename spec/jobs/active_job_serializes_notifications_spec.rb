@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # While this test calls NotificationSendJob, it is more accurately testing the
@@ -19,9 +21,9 @@ RSpec.describe NotificationSendJob do
       notification_event = NotificationEvent.new(caseid, notificationid)
 
       expect(Sender.count).to eq 0
-      perform_enqueued_jobs {
+      perform_enqueued_jobs do
         NotificationSendJob.set(wait: 3.seconds).perform_later(Sender, notification_event)
-      }
+      end
       expect(Sender.count).to eq 1
     end
   end
@@ -53,9 +55,9 @@ RSpec.describe NotificationSendJob do
       notification_event = NotificationEvent.new(caseid, notificationid)
 
       expect(Sender.count).to eq 0
-      perform_enqueued_jobs {
+      perform_enqueued_jobs do
         NotificationSendJob.set(wait: 3.seconds).perform_later(Sender, notification_event)
-      }
+      end
       expect(Sender.count).to eq 1
 
       expect(Parent).to have_received(:find_by).with(caseid: caseid)
