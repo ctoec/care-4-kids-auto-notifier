@@ -1,9 +1,9 @@
 class EventCursor < ApplicationRecord
-  def self.update_last_document_assigned_events(time:)
+  def self.document_assigned_events_cursor=(time)
     find_by(key: 'document_assigned_event').update(time: time)
   end
 
-  def self.fetch_last_document_assigned_events
+  def self.document_assigned_events_cursor
     find_by(key: 'document_assigned_event').time.iso8601
   end
 end
