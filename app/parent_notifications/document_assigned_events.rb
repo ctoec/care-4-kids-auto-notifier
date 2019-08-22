@@ -8,7 +8,7 @@ class DocumentAssignedEvents
     database: ENV.fetch('UNITEDWAYDB_DATABASE')
   )
 
-  def self.fetch_new
+  def self.fetch_all_new
     query = <<-SQL
             SELECT *
             FROM document_assigned_index

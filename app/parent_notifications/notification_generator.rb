@@ -5,8 +5,8 @@ class NotificationGenerator
     @document_assigned_events = document_assigned_events
   end
 
-  def fetch_new
-    @document_assigned_events.fetch_new.each do |event|
+  def fetch_all_new
+    @document_assigned_events.fetch_all_new.each do |event|
       found_parent = Applicant.where(caseid: event.caseid).first
       yield build_notification_event(event: event) unless found_parent.nil?
     end

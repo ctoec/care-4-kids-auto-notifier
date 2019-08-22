@@ -7,6 +7,6 @@ class NotificationManager
   end
 
   def run
-    @notification_generator.fetch_new { |message| @message_queue.put message }
+    @notification_generator.fetch_all_new { |message| @message_queue.put message }
   end
 end
