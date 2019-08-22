@@ -16,8 +16,8 @@ class DocumentAssignedEvents
     SQL
     @@client
       .prepare(query)
-      .execute(EventCursor.fetch_last_document_assigned_events)
-      .map {|row| build_event row}
+      .execute(EventCursor.document_assigned_events_cursor)
+      .map { |row| build_event row }
   end
 
   def self.build_event(row)
