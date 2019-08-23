@@ -11,8 +11,8 @@ RSpec.describe NotificationSendJob do
       message_text = 'This is a message'
       cellphonenumber = '+1234567890'
       caseid = rand(100).to_s
-      
-      parent = Applicant.create(caseid: caseid, cellphonenumber: cellphonenumber)
+
+      Parent.create(caseid: caseid, cellphonenumber: cellphonenumber)
       notification = Notification.create(message_text: message_text)
       notificationid = notification.id
 
@@ -34,16 +34,16 @@ RSpec.describe NotificationSendJob do
       notificationid = 1
 
       # Prepare for ActiveRecord doubles
-      ApplicantCache = Applicant
+      ParentCache = Parent
       NotificationCache = Notification
-      Object.instance_eval { remove_const :Applicant } unless not defined? Applicant
+      Object.instance_eval { remove_const :Parent } unless not defined? Parent
       Object.instance_eval { remove_const :Notification } unless not defined? Notification
 
       # Create ActiveRecord doubles
       parent = double
       allow(parent).to receive(:cellphonenumber).and_return(cellphonenumber)
-      Applicant = double
-      allow(Applicant).to receive(:find_by).and_return(parent)
+      Parent = double
+      allow(Parent).to receive(:find_by).and_return(parent)
 
       notification = double
       allow(notification).to receive(:message_text).and_return(message_text)
@@ -58,13 +58,13 @@ RSpec.describe NotificationSendJob do
       }
       expect(Sender.count).to eq 1
 
-      expect(Applicant).to have_received(:find_by).with(caseid: caseid)
+      expect(Parent).to have_received(:find_by).with(caseid: caseid)
       expect(Notification).to have_received(:find).with(notificationid)
 
       # Clean up ActiveRecord doubles
-      Object.instance_eval { remove_const :Applicant } unless not defined? Applicant
+      Object.instance_eval { remove_const :Parent } unless not defined? Parent
       Object.instance_eval { remove_const :Notification } unless not defined? Notification
-      Applicant = ApplicantCache
+      Parent = ParentCache
       Notification = NotificationCache
     end
   end

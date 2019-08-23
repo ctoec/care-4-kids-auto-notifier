@@ -10,7 +10,7 @@ RSpec.describe NotificationSendJob, :type => :job do
       sender = double
       allow(sender).to receive(:createMessage)
 
-      parent = Applicant.create(caseid: caseid, cellphonenumber: cellphonenumber)
+      Parent.create(caseid: caseid, cellphonenumber: cellphonenumber)
       notification = Notification.create(message_text: message_text)
 
       notification_event = NotificationEvent.new(caseid, notification.id)

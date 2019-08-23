@@ -5,9 +5,9 @@ RSpec.describe NotificationGenerator do
     context 'there is an event that matches a parent' do
       it 'returns a notification event with the correct case id' do
         caseid = (rand 100).to_s
-        document_assigned_events = build_document_assigned_events_stub(parents: [
-                                                                         Applicant.create(caseid: caseid, cellphonenumber: '+5555555555')
-                                                                       ])
+        document_assigned_events = build_document_assigned_events_stub(
+          parents: [Parent.create(caseid: caseid, cellphonenumber: '+5555555555')]
+        )
 
         notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
 
@@ -17,10 +17,14 @@ RSpec.describe NotificationGenerator do
 
       it 'returns a notification event with a notification id that is linked stored notification with message text' do
         caseid = (rand 100).to_s
-        document_assigned_events = build_document_assigned_events_stub(parents: [
-                                                                         Applicant.create(caseid: caseid, cellphonenumber: '+5555555555')
-                                                                       ])
-        notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
+        document_assigned_events = build_document_assigned_events_stub(
+          parents: [
+            Parent.create(caseid: caseid, cellphonenumber: '+5555555555')
+          ]
+        )
+        notification_generator = NotificationGenerator.new(
+          document_assigned_events: document_assigned_events
+        )
 
         notification_events = fetch_all_new notification_generator
         notificationid = notification_events.first.notificationid
@@ -31,10 +35,12 @@ RSpec.describe NotificationGenerator do
 
     context 'there are multiple events that have corresponding parents' do
       it 'returns all the notification events' do
-        document_assigned_events = build_document_assigned_events_stub(parents: [
-                                                                         Applicant.create(caseid: 'x', cellphonenumber: '+5555555555'),
-                                                                         Applicant.create(caseid: 'y', cellphonenumber: '+5555555555')
-                                                                       ])
+        document_assigned_events = build_document_assigned_events_stub(
+          parents: [
+            Parent.create(caseid: 'x', cellphonenumber: '+5555555555'),
+            Parent.create(caseid: 'y', cellphonenumber: '+5555555555')
+          ]
+        )
         notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
 
         notification_events = fetch_all_new notification_generator
@@ -44,10 +50,11 @@ RSpec.describe NotificationGenerator do
 
     context 'there are multiple events and some do not have a corresponding parents' do
       it 'returns only the notification events that correspond to a parent' do
-        Applicant.create(caseid: 'x', cellphonenumber: '+5555555555')
-        document_assigned_events = build_document_assigned_events_stub(parents: [
-                                                                         Applicant.create(caseid: 'y', cellphonenumber: '+5555555555')
-                                                                       ])
+        Parent.create(caseid: 'x', cellphonenumber: '+5555555555')
+        parents = [
+          Parent.create(caseid: 'y', cellphonenumber: '+5555555555')
+        ]
+        document_assigned_events = build_document_assigned_events_stub(parents: parents)
 
         notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
 

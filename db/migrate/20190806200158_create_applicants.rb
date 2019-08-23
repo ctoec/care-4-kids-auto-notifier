@@ -1,6 +1,6 @@
-class CreateApplicants < ActiveRecord::Migration[5.2]
+class CreateParents < ActiveRecord::Migration[5.2]
   def change
-    create_table :applicants do |t|
+    create_table :parents do |t|
       t.string :caseid
       t.string :cellphonenumber
 
