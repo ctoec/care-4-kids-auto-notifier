@@ -25,12 +25,7 @@ RSpec.describe 'Integration' do
   end
 
   it 'sends notifications' do
-    message_queue = NotificationQueue.new(job: NotificationSendJob, sender: FakeSender, scheduler: ImmediateScheduler)
-    notification_generator = NotificationGenerator.new document_assigned_events: DocumentAssignedEvents
-    notification_manager = NotificationManager.new message_queue: message_queue, notification_generator: notification_generator
-    
-    notification_manager.run
-
+    NotificationRunner.schedule_notifications(sender: FakeSender)
     expect(FakeSender.messages.size).to eq 2
   end
 

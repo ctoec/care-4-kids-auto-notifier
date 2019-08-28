@@ -5,6 +5,7 @@ RUN apt-get update -qq && apt-get install -y build-essential \
     libqtwebkit4 \
     libqt4-dev xvfb \ 
     mariadb-client \
+    crontab \
     curl && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install nodejs

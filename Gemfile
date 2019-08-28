@@ -16,7 +16,7 @@ gem "twilio-ruby", "~> 5.25"
 # Jobs runner gems
 gem "daemons", "~> 1.3"
 gem "delayed_job_active_record", "~> 4.1.4"
-
+gem 'whenever'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

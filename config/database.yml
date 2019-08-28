@@ -8,3 +8,7 @@ development: &default
 test:
   <<: *default
   database: backbone_data_bootstrap_test
+
+production:
+  <<: *default
+  database: backbone_data_bootstrap_production
