@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe NotificationSendJob do
   context 'when a notification event is supplied' do
-    it '.perform is called with the corresponding message and cell phone numbers' do
+    it '.perform is called with the corresponding message and cell phone numbers with country code added' do
       message_text = 'This is a message'
       cellphonenumber = '234567890'
       caseid = rand(100).to_s
@@ -20,7 +20,7 @@ RSpec.describe NotificationSendJob do
       NotificationSendJob.perform_now(sender, notification_event)
 
       expect(sender).to have_received(:createMessage).exactly(:once)
-      expect(sender).to have_received(:createMessage).with(message_text: message_text, to_number: cellphonenumber)
+      expect(sender).to have_received(:createMessage).with(message_text: message_text, to_number: "+1#{cellphonenumber}")
     end
   end
 end
