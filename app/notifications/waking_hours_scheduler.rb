@@ -6,21 +6,21 @@ class WakingHoursScheduler
 
   def self.schedule(job, *objs)
     if isTooEarly || isTooLate then
-      job.set(wait_until: getNextScheduleTime).perform_later(*objs)
+      job.set(wait_until: getScheduleTimeForLater).perform_later(*objs)
     else
       job.perform_now(*objs)
     end
   end
 
-  def self.getNextScheduleTime
+  def self.getScheduleTimeForLater
     now = Time.now
     if isTooEarly then
-      Time.new(now.year, now.month, now.day, @@EarliestTime, 0, 0)
-    elsif isTooLate
-      Time.new(now.year, now.month, now.day + 1, @@EarliestTime, 0, 0)
-    else
-      now
+      next_time = Time.new(now.year, now.month, now.day, @@EarliestTime, 0, 0)
     end
+    if isTooLate
+      next_time = Time.new(now.year, now.month, now.day + 1, @@EarliestTime, 0, 0)
+    end
+    next_time
   end
 
   def self.isTooEarly
