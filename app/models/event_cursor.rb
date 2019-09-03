@@ -6,6 +6,6 @@ class EventCursor < ApplicationRecord
   end
 
   def self.document_assigned_events_cursor
-    find_by(key: 'document_assigned_event').time.iso8601
+    find_by(key: 'document_assigned_event').time
   end
 end
