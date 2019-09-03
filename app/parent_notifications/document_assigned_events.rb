@@ -37,6 +37,7 @@ class DocumentAssignedEvents
     events = @@client
       .execute(query)
       .map { |row| build_event row }
+      .compact
     update_cursor(events: events)
   end
 
@@ -49,15 +50,63 @@ class DocumentAssignedEvents
   end
 
   def self.build_event(row)
-    DocumentAssignedEvent.new(
-      row['ClientID'],
-      row['DocType'],
-      row['Source'],
-      parse_datetime_from_export(row)
-    )
+    begin
+      DocumentAssignedEvent.new(
+        parse_client_id_from_export(row),
+        parse_doc_type_from_export(row),
+        parse_source_from_export(row),
+        parse_datetime_from_export(row)
+      )
+    rescue InvalidDocuclassDataTypeError => e
+      Rails.logger.error e
+      nil
+    end
+  end
+
+  def self.parse_client_id_from_export(row)
+    row['ClientID']
+  end
+
+  def self.parse_doc_type_from_export(row)
+    doc_type = row['DocType']
+    # Handling both '-' and '–' due to character encoding mismatch
+    if (
+      ![
+        'RP - Redetermination',
+        'SP - Parent Supporting Document',
+        'PS - Provider Supporting Document',
+        'RP – Redetermination',
+        'SP – Parent Supporting Document',
+        'PS – Provider Supporting Document',
+      ].include?(doc_type)
+    ) then
+      raise InvalidDocuclassDataTypeError.new("Invalid DocType: #{doc_type}")
+    end
+
+    if doc_type.include?('-') then
+      doc_type_parts = doc_type.split(' - ')
+    else
+      doc_type_parts = doc_type.split(' – ')
+    end
+    doc_type_parts[1].downcase
+  end
+
+  def self.parse_source_from_export(row)
+    source = row['Source']
+    if (!['Fax', 'Emails', 'Scans'].include?(source))
+      raise InvalidDocuclassDataTypeError.new("Invalid Source: #{source}")
+    end
+    case source
+    when 'Fax'
+      'fax'
+    when 'Emails'
+      'web upload'
+    when 'Scans'
+      'mail'
+    end
   end
 
   def self.parse_datetime_from_export(row)
-    Time.parse("#{row['ArchivedAt']}")
+    row['ArchivedAt']
   end
 end

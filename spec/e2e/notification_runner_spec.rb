@@ -13,10 +13,12 @@ RSpec.describe 'Integration' do
 
     case_id = 7342
     cellphonenumber = '5551239876'
-    
-    EventCursor.create(key: 'document_assigned_event', time: Time.now - 1.day)
 
-    document_datetime = Time.now + 1.minutes
+    date = Time.new(2010,1,1,9,0,0)
+    
+    EventCursor.create(key: 'document_assigned_event', time: date - 1.day)
+
+    document_datetime = date + 1.minutes
     document_date = document_datetime.to_date
     document_time = document_datetime.strftime("%H:%M:%S")
     result = write_client.insert(
@@ -38,7 +40,7 @@ RSpec.describe 'Integration' do
 
     result = write_client.insert(
         doc_id: 2,
-        typeId: SQLServerClient::FAX,
+        typeId: SQLServerClient::EMAILS,
 
         archivedAt: document_datetime,
         deleted: nil,
@@ -49,8 +51,24 @@ RSpec.describe 'Integration' do
         instanceId: 2,
 
         dateEntered: document_date,
-        timeEntered: document_time,
+        timeEntered: document_time
+      )
+    ).do
 
+    result = write_client.insert(
+        doc_id: 3,
+        typeId: SQLServerHelper::SCANS,
+
+        archivedAt: document_datetime,
+        deleted: nil,
+        client_id: case_id,
+        c17: '5551239876',
+        doc_type: 'RP - Redetermination',
+
+        instanceId: 3,
+
+        dateEntered: document_date,
+        timeEntered: document_time,
       )
 
     Parent.create(caseid: case_id, cellphonenumber: cellphonenumber, active: true)
@@ -59,7 +77,46 @@ RSpec.describe 'Integration' do
   context 'parent is active' do
     it 'sends notifications' do
       NotificationRunner.schedule_notifications(sender: FakeSender, scheduler: ImmediateScheduler)
-      expect(FakeSender.messages.size).to eq 2
+      expect(FakeSender.messages.size).to eq 3
+    end
+  end
+
+  context 'document received by fax' do
+    it 'message text is correctly formatted to use fax' do
+      NotificationRunner.schedule_notifications(sender: FakeSender)
+      expect(FakeSender.messages[0]).to include(
+        <<-string.gsub(/\s+/, " ").strip
+          This is Care 4 Kids!
+          We have received your redetermination by fax on 01/01/2010.
+          You will be notified if there is any missing information.
+        string
+      )
+    end
+  end
+
+  context 'document received by email' do
+    it 'message text is correctly formatted to use web upload' do
+      NotificationRunner.schedule_notifications(sender: FakeSender)
+      expect(FakeSender.messages[1]).to include(
+        <<-string.gsub(/\s+/, " ").strip
+          This is Care 4 Kids!
+          We have received your redetermination by web upload on 01/01/2010.
+          You will be notified if there is any missing information.
+        string
+      )
+    end
+  end
+
+  context 'document received by scan' do
+    it 'message text is correctly formatted to use mail' do
+      NotificationRunner.schedule_notifications(sender: FakeSender)
+      expect(FakeSender.messages[2]).to include(
+        <<-string.gsub(/\s+/, " ").strip
+          This is Care 4 Kids!
+          We have received your redetermination by mail on 01/01/2010.
+          You will be notified if there is any missing information.
+        string
+      )
     end
   end
 
@@ -77,7 +134,7 @@ class FakeSender
   end
 
   def self.createMessage(message_text:, to_number:)
-    @@messages << "A message with the next: \"#{message_text}\" was sent to #{to_number}."
+    @@messages << "A message with the text: \"#{message_text}\" was sent to #{to_number}."
   end
 
   def self.reset

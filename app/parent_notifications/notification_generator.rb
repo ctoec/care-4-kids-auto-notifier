@@ -14,12 +14,25 @@ class NotificationGenerator
 
   def build_notification_event(event:)
     notification = Notification.create(
-      message_text: "We have received document #{event.type}"
+      message_text: build_document_received_message(
+        type: event.type, source: event.source, date: event.date
+      )
     )
     NotificationEvent.new(event.caseid, notification.id)
   end
 
   def parent_is_active(parent)
     !parent.nil? and parent.active
+  end
+  
+  def build_document_received_message(type:, source:, date:)
+    # Formats to single line
+    <<-string.gsub(/\s+/, " ").strip
+      This is Care 4 Kids!
+      We have received your #{type}
+      by #{source}
+      on #{date.strftime('%m/%d/%Y')}.
+      You will be notified if there is any missing information.
+    string
   end
 end

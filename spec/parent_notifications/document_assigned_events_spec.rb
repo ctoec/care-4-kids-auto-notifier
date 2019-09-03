@@ -47,8 +47,8 @@ RSpec.describe DocumentAssignedEvents do
 
         event = DocumentAssignedEvents.fetch_all_new.first
         expect(event.caseid).to eql '1'
-        expect(event.type).to eql 'RP - Redetermination'
-        expect(event.source).to eql 'Fax'
+        expect(event.type).to eql 'redetermination'
+        expect(event.source).to eql 'fax'
         expect(event.date.strftime('%Y-%m-%d %H:%M:00')).to eql document_datetime.strftime('%Y-%m-%d %H:%M:00')
       end
 
@@ -347,6 +347,78 @@ RSpec.describe DocumentAssignedEvents do
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
       end
+    end
+  end
+
+  context 'when an event has all database fields that are valid types' do
+    it 'returns the event' do
+      EventCursor.document_assigned_events_cursor = Time.now
+
+      counter = 0
+      document_datetime = Time.now + 1.minutes
+      document_date = document_datetime.to_date
+      document_time = document_datetime.strftime("%H:%M:%S")
+      [
+        'RP - Redetermination',
+        'SP - Parent Supporting Document',
+        'PS - Provider Supporting Document',
+        'RP – Redetermination',
+        'SP – Parent Supporting Document',
+        'PS – Provider Supporting Document',
+      ].each do |doc_type|
+        counter += 1
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: counter,
+            typeId: FAX,
+
+            archivedAt: document_datetime,
+            deleted: nil,
+            client_id: counter.to_s,
+            c17: '5551239876',
+            doc_type: doc_type,
+
+            instanceId: counter,
+
+            dateEntered: document_date,
+            timeEntered: document_time,
+
+            sourceAsNumber: FAX
+          )
+        ).do
+      end
+      expect(DocumentAssignedEvents.fetch_all_new.length).to eql counter
+    end
+  end
+
+  context 'when an event has an invalid doc type type' do
+    it 'does not return the event' do
+      EventCursor.document_assigned_events_cursor = Time.now
+
+      document_datetime = Time.now + 1.minutes
+      document_date = document_datetime.to_date
+      document_time = document_datetime.strftime("%H:%M:%S")
+      result = @write_client.execute(
+        insert_statement(
+          doc_id: 1,
+          typeId: FAX,
+
+          archivedAt: document_datetime,
+          deleted: nil,
+          client_id: '1',
+          c17: '5551239876',
+          doc_type: 'not a valid document type',
+
+          instanceId: 1,
+
+          dateEntered: document_date,
+          timeEntered: document_time,
+
+          sourceAsNumber: FAX
+        )
+      ).do
+
+      expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
     end
   end
 end
