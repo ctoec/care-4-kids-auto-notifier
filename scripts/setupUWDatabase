@@ -1,20 +1,13 @@
 #!/bin/bash
 
 mysql --host=$UNITEDWAYDB_HOST --user=$UNITEDWAYDB_ADMIN_USERNAME --password=$UNITEDWAYDB_ADMIN_PASSWORD << EOF
+CREATE DATABASE IF NOT EXISTS ${UNITEDWAYDB_DATABASE};
+
 CREATE USER IF NOT EXISTS '${UNITEDWAYDB_USERNAME}'@'%' IDENTIFIED BY '${UNITEDWAYDB_PASSWORD}';
 GRANT SELECT ON  ${UNITEDWAYDB_DATABASE} . * TO   '${UNITEDWAYDB_USERNAME}'@'%';
 
-CREATE DATABASE IF NOT EXISTS ${UNITEDWAYDB_DATABASE};
 USE ${UNITEDWAYDB_DATABASE};
 
-CREATE TABLE IF NOT EXISTS document_assigned_index (
-    ClientID bigint,
-    DocType varchar(30) not null,
-    ReceivedDate date not null,
-    CallerID varchar(10),
-    ExportDate date not null,
-    ExportTime time not null,
-    Source varchar(20) not null,
-    DocID bigint not null
-);
+CREATE TABLE IF NOT EXISTS document_assigned_index ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
+CREATE TABLE IF NOT EXISTS impact_indexed ( caseid varchar(20) not null, document_type varchar(20) not null, index_date datetime not null );
 EOF

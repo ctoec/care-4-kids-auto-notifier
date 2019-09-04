@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Integration' do
   before(:each) do
-    case_id = 7342
-    cellphonenumber = '5551239876'
+    case_id = '7342'
+    cellphonenumber = '+15551239876'
     
     EventCursor.create(key: 'document_assigned_event', time: Time.now - 1.day)
 
@@ -15,43 +15,11 @@ RSpec.describe 'Integration' do
       password: ENV.fetch('UNITEDWAYDB_ADMIN_PASSWORD'),
       database: ENV.fetch('UNITEDWAYDB_DATABASE')
     )
-    insert_statement = <<-SQL
-      INSERT INTO document_assigned_index(
-        ClientID,
-        DocType,
-        ReceivedDate,
-        CallerID,
-        ExportDate,
-        ExportTime,
-        Source,
-        DocID
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-    SQL
+    insert_statement = 'INSERT INTO document_assigned_index(caseid, document_type, index_date) VALUES (?, ?, ?);'
 
     insert_command = client.prepare(insert_statement)
-    document_datetime = Time.now + 1.second
-    document_date = document_datetime.to_date
-    document_time = document_datetime.strftime("%H:%M:%S")
-    insert_command.execute(
-      case_id,
-      'doc type 1',
-      document_date,
-      cellphonenumber,
-      document_date,
-      document_time,
-      'test',
-      12345
-    )
-    insert_command.execute(
-      case_id,
-      'doc type 2',
-      document_date,
-      cellphonenumber,
-      document_date,
-      document_time,
-      'test',
-      12345
-    )
+    insert_command.execute(case_id, 'doc type 2', Time.now)
+    insert_command.execute(case_id, 'doc type 1', Time.now)
 
     Parent.create(caseid: case_id, cellphonenumber: cellphonenumber)
   end

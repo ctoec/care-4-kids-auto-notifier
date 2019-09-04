@@ -6,7 +6,7 @@ RSpec.describe NotificationSendJob do
   context 'when a notification event is supplied' do
     it '.perform is called with the corresponding message and cell phone numbers' do
       message_text = 'This is a message'
-      cellphonenumber = '234567890'
+      cellphonenumber = '+1234567890'
       caseid = rand(100).to_s
 
       sender = double

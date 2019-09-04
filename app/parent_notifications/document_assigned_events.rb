@@ -10,21 +10,15 @@ class DocumentAssignedEvents
     database: ENV.fetch('UNITEDWAYDB_DATABASE')
   )
 
-  # TODO: figure out how to get received dates after a certain point b/c of datetime => date switch
   def self.fetch_all_new
     query = <<-SQL
             SELECT *
             FROM document_assigned_index
-            WHERE ExportDate >= ?
-            AND ExportTime > ?;
+            WHERE index_date > ?;
     SQL
-    events_cursor = EventCursor.document_assigned_events_cursor
     events = @@client
       .prepare(query)
-      .execute(
-        events_cursor.to_date,
-        events_cursor.strftime("%H:%M:%S")
-      )
+      .execute(EventCursor.document_assigned_events_cursor)
       .map { |row| build_event row }
     update_cursor(events: events)
     return events
@@ -40,13 +34,9 @@ class DocumentAssignedEvents
 
   def self.build_event(row)
     DocumentAssignedEvent.new(
-      row['ClientID'],
-      row['DocType'],
-      parse_datetime_from_export(row)
+      row['caseid'],
+      row['document_type'],
+      row['index_date']
     )
-  end
-
-  def self.parse_datetime_from_export(row)
-    Time.parse("#{row['ExportDate']} #{row['ExportTime']}")
   end
 end
