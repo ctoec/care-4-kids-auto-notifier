@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_20_012802) do
+ActiveRecord::Schema.define(version: 2019_09_06_161253) do
 
   create_table "delayed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 2019_08_20_012802) do
     t.string "encrypted_cellphonenumber"
     t.string "encrypted_cellphonenumber_iv"
     t.string "caseid"
+    t.boolean "active", default: false, null: false
   end
 
 end
