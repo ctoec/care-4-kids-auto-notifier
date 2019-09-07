@@ -1,0 +1,19 @@
+{
+  "name": "care-for-kids-twilio-studio-functions",
+  "version": "1.0.0",
+  "description": "Collection of Twilio Studio Functions for Care 4 Kids SMS notifier",
+  "main": "index.js",
+  "scripts": {
+    "test": "find ./tests -name '*.test.js' | xargs node"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "luxon": "^1.17.2",
+    "twilio-run": "^2.0.0-rc.5"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "cheerio": "^1.0.0-rc.3"
+  }
+}
