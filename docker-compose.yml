@@ -40,7 +40,18 @@ services:
       - MYSQL_ROOT_PASSWORD=password
     networks:
       - unitedway
+  twilio_studio:
+    image: node:8.10
+    command: bash -c "while true; do sleep 10; done"
+    ports:
+      - "3000:3000"
+    volumes:
+    - ./twilio-studio:/app
+    working_dir: /app
+    networks: 
+      - twilio
 networks:
   app:
   unitedway:
   jobs:
+  twilio:
