@@ -10,9 +10,7 @@ class NotificationGenerator
   def fetch_all_new
     @document_assigned_events.fetch_all_new.each do |event|
       found_parent = Parent.where(caseid: event.caseid).first
-      yield build_notification_event(event: event) unless (
-        found_parent.nil? or !found_parent.active
-      )
+      yield build_notification_event(event: event) if parent_is_active(found_parent)
     end
   end
 
@@ -21,5 +19,9 @@ class NotificationGenerator
       message_text: "We have received document #{event.type}"
     )
     NotificationEvent.new(event.caseid, notification.id)
+  end
+
+  def parent_is_active(parent)
+    !parent.nil? and parent.active
   end
 end
