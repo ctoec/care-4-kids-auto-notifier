@@ -12,7 +12,7 @@ class TwilioSender
   def self.createMessage(message_text:, to_number:)
     @@client.messages.create(
       from: @@from,
-      to: to_number,
+      to: "+1#{to_number}",
       body: message_text
     )
   end

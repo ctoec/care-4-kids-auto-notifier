@@ -8,6 +8,6 @@ class NotificationSendJob < ApplicationJob
     notification = Notification.find(notification_event.notificationid)
 
     sender.createMessage(message_text: notification.message_text,
-                         to_number: "+1#{parent.cellphonenumber}")
+                         to_number: parent.cellphonenumber)
   end
 end

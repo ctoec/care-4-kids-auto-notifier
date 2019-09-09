@@ -10,7 +10,6 @@ class DocumentAssignedEvents
     database: ENV.fetch('UNITEDWAYDB_DATABASE')
   )
 
-  # TODO: figure out how to get received dates after a certain point b/c of datetime => date switch
   def self.fetch_all_new
     query = <<-SQL
             SELECT *
