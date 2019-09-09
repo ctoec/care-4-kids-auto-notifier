@@ -64,16 +64,6 @@ RSpec.describe 'Integration' do
     end
   end
 
-  context 'parent is inactive' do
-    it 'does not send notifications' do
-      parent = Parent.first
-      parent.active = false
-      parent.save
-      NotificationRunner.schedule_notifications(sender: FakeSender)
-      expect(FakeSender.messages.size).to eq 0 
-    end
-  end
-
   after(:each) do
     client.query('DELETE FROM document_assigned_index')
     Parent.delete_all
