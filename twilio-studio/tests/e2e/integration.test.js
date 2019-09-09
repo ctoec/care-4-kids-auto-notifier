@@ -49,7 +49,7 @@ async function tests() {
 
       (function for_getSupportingDocumentsProcessingStatusDates_to_return_a_valid_end_date() {
         const date = webscraper.getSupportingDocumentsProcessingStatusDates();
-        const endDate = date.split(" – ")[0];
+        const endDate = date.split(" – ")[1]; // this is a – not a -
         
         function expectation(testValue) {
           return expectValidDate(testValue);
