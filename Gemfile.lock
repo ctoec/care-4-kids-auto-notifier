@@ -173,7 +173,7 @@ GEM
     thor (0.20.3)
     thread_safe (0.3.6)
     timecop (0.9.1)
-    twilio-ruby (5.25.4)
+    twilio-ruby (5.26.0)
       faraday (~> 0.9)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
@@ -189,7 +189,7 @@ GEM
     websocket-extensions (0.1.4)
     whenever (1.0.0)
       chronic (>= 0.6.3)
-    zeitwerk (2.1.9)
+    zeitwerk (2.1.10)
 
 PLATFORMS
   ruby
