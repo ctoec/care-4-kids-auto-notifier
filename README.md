@@ -47,3 +47,7 @@ bundle exec whenever
 ```
 bundle exec whenever --update-crontab
 ``` 
+
+## Deploy app
+1. set `SERVER_IP` env variable 
+2. run `cap production deploy` or `cap production deploy:updated`

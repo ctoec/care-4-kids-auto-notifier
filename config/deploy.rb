@@ -1,7 +1,7 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.11.1"
 
-set :application, "care-4-kids-auto-notifier"
+set :application, "care-4-kids-auto-notifier-2"
 set :repo_url, "git@github.com:ctoec/care-4-kids-auto-notifier.git"
 
 # Default branch is :master

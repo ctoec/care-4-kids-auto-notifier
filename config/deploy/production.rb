@@ -3,7 +3,8 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server "", user: "rails", roles: %w{app db web}
+set :rvm_custom_path, '/usr/share/rvm'
+server ENV.fetch "SERVER_IP", user: "rails", roles: %w{app db web}
 # server "db.", user: "deploy", roles: %w{db}
 
 
