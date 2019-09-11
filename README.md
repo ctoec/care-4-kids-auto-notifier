@@ -49,5 +49,17 @@ bundle exec whenever --update-crontab
 ``` 
 
 ## Deploy app
-1. set `SERVER_IP` env variable 
-2. run `cap production deploy` or `cap production deploy:updated`
+### First deploy
+1. ssh into server and install dependencies
+    ``` bash
+    sudo apt-get install build-essential libxml2-dev libxslt1-dev  libqtwebkit4  libqt4-dev xvfb libmysqlclient-dev
+    ```
+1. Set `SERVER_IP` env variable. This is the target server IP address.
+1. Run `cap production deploy` 
+1. ssh into server and add .env from lastpass file into the `/home/rails/railsapps/care-4-kids-auto-notifier/shared` folder
+1. run `cap production deploy:updated`
+
+### Deploys after the inital deploy
+1. run `cap production deploy`
+
+
