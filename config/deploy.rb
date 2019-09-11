@@ -2,7 +2,7 @@
 lock "~> 3.11.1"
 
 set :application, "care-4-kids-auto-notifier"
-set :repo_url, "https://github.com/ctoec/care-4-kids-auto-notifier.git"
+set :repo_url, "git@github.com:ctoec/care-4-kids-auto-notifier.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
