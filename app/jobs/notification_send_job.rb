@@ -4,7 +4,7 @@ class NotificationSendJob < ApplicationJob
   queue_as :default
 
   retry_on StandardError, attempts: 1 do |job, error|
-    notification_event = job.arguments[1]
+    notification_event = job.get_notification_event
     caseid = notification_event.caseid
     notificationid = notification_event.notificationid
     parent = Parent.find_by!(caseid: caseid)
@@ -27,5 +27,10 @@ class NotificationSendJob < ApplicationJob
 
     sender.createMessage(message_text: notification.message_text,
                          to_number: parent.cellphonenumber)
+  end
+
+  def get_notification_event()
+    # arguments is [sender, notification_event]
+    self.arguments[1]
   end
 end
