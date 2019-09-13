@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-NotificationEvent = Struct.new(:caseid, :notificationid)
-
 class NotificationGenerator
   def initialize(document_assigned_events:)
     @document_assigned_events = document_assigned_events
