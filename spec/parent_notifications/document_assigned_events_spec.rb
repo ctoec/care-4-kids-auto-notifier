@@ -1,33 +1,17 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-
-INSERT_STATEMENT = <<-SQL
-  INSERT INTO document_assigned_index(
-    ClientID,
-    DocType,
-    ReceivedDate,
-    CallerID,
-    ExportDate,
-    ExportTime,
-    Source,
-    DocID
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-  SQL
+require 'sqlserver_helper'
 
 RSpec.describe DocumentAssignedEvents do
   before(:all) do
-    @client = Mysql2::Client.new(
-      host: ENV.fetch('UNITEDWAYDB_HOST'),
-      username: ENV.fetch('UNITEDWAYDB_ADMIN_USERNAME'),
-      password: ENV.fetch('UNITEDWAYDB_ADMIN_PASSWORD'),
-      database: ENV.fetch('UNITEDWAYDB_DATABASE')
-    )
+    @write_client = SQLServerClient.new
+    @write_client.setup_types_table
   end
 
   before(:each) do
     EventCursor.create(key: 'document_assigned_event', time: Time.now)
-    @client.prepare('DELETE FROM document_assigned_index;').execute
+    @write_client.clean_database
   end
 
   describe 'fetch_all_new' do
@@ -41,25 +25,181 @@ RSpec.describe DocumentAssignedEvents do
       it 'fetches one event with the correct format' do
         EventCursor.document_assigned_events_cursor = Time.now
 
-        insert_command = @client.prepare(INSERT_STATEMENT)
-        document_datetime = Time.now + 1.second
+        document_datetime = Time.now + 1.minutes
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
-        insert_command.execute(
-          1234,
-          'doc type 1',
-          document_date,
-          '5555555555',
-          document_date,
-          document_time,
-          'test',
-          12345
-        )
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 1,
+            typeId: FAX,
+
+            archivedAt: document_datetime,
+            deleted: nil,
+            client_id: '1',
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 1,
+
+            dateEntered: document_date,
+            timeEntered: document_time,
+
+            sourceAsNumber: FAX
+          )
+        ).do
 
         event = DocumentAssignedEvents.fetch_all_new.first
-        expect(event.caseid).to eql 1234
-        expect(event.type).to eql 'doc type 1'
-        expect(event.date.to_s).to eql document_datetime.to_s
+        expect(event.caseid).to eql '1'
+        expect(event.type).to eql 'RP - Redetermination'
+        expect(event.source).to eql 'Fax'
+        expect(event.date.strftime('%Y-%m-%d %H:%M:00')).to eql document_datetime.strftime('%Y-%m-%d %H:%M:00')
+      end
+
+      it 'does not fetch events that have a deleted type' do
+        EventCursor.document_assigned_events_cursor = Time.now
+
+        document_datetime = Time.now + 1.minutes
+        document_date = document_datetime.to_date
+        document_time = document_datetime.strftime("%H:%M:%S")
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 1,
+            typeId: DELETED,
+
+            archivedAt: document_datetime,
+            deleted: nil,
+            client_id: '1',
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 1,
+
+            dateEntered: document_date,
+            timeEntered: document_time,
+
+            sourceAsNumber: DELETED
+          )
+        ).do
+
+        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+      end
+
+      it 'does not fetch events that are marked as deleted in documents table' do
+        EventCursor.document_assigned_events_cursor = Time.now
+
+        document_datetime = Time.now + 1.minutes
+        document_date = document_datetime.to_date
+        document_time = document_datetime.strftime("%H:%M:%S")
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 1,
+            typeId: FAX,
+
+            archivedAt: document_datetime,
+            deleted: 1,
+            client_id: '1',
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 1,
+
+            dateEntered: document_date,
+            timeEntered: document_time,
+
+            sourceAsNumber: FAX
+          )
+        ).do
+
+        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+      end
+
+      it 'does only fetch events that are faxes emails and scans in workflowsteps table' do
+        EventCursor.document_assigned_events_cursor = Time.now
+
+        document_datetime = Time.now + 1.minutes
+        document_date = document_datetime.to_date
+        document_time = document_datetime.strftime("%H:%M:%S")
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 1,
+            typeId: FAX,
+
+            archivedAt: document_datetime,
+            deleted: nil,
+            client_id: '1',
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 1,
+
+            dateEntered: document_date,
+            timeEntered: document_time,
+
+            sourceAsNumber: FAX
+          )
+        ).do
+
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 2,
+            typeId: EMAILS,
+
+            archivedAt: document_datetime,
+            deleted: nil,
+            client_id: '1',
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 2,
+
+            dateEntered: document_date,
+            timeEntered: document_time,
+
+            sourceAsNumber: EMAILS
+          )
+        ).do
+
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 3,
+            typeId: SCANS,
+
+            archivedAt: document_datetime,
+            deleted: nil,
+            client_id: '1',
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 3,
+
+            dateEntered: document_date,
+            timeEntered: document_time,
+
+            sourceAsNumber: SCANS
+          )
+        ).do
+
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 5,
+            typeId: OTHER,
+
+            archivedAt: document_datetime,
+            deleted: nil,
+            client_id: '1',
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 5,
+
+            dateEntered: document_date,
+            timeEntered: document_time,
+
+            sourceAsNumber: OTHER
+          )
+        ).do
+
+        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
       end
     end
 
@@ -67,37 +207,55 @@ RSpec.describe DocumentAssignedEvents do
       it 'fetches all events' do
         current_datetime = Time.now
 
-        future_datetime = current_datetime + 1.second
+        future_datetime = current_datetime + 1.minutes
         future_date = future_datetime.to_date
         future_time = future_datetime.strftime("%H:%M:%S")
 
-        later_future_datetime = future_datetime + 1.second
+        later_future_datetime = future_datetime + 1.minutes
         later_future_date = later_future_datetime.to_date
         later_future_time = later_future_datetime.strftime("%H:%M:%S")
 
         EventCursor.document_assigned_events_cursor = current_datetime
 
-        insert_command = @client.prepare(INSERT_STATEMENT)
-        insert_command.execute(
-          1234,
-          'doc type 1',
-          future_date,
-          '5555555555',
-          future_date,
-          future_time,
-          'test',
-          12345
-        )
-        insert_command.execute(
-          1235,
-          'doc type 1',
-          later_future_date,
-          '5555555555',
-          later_future_date,
-          later_future_time,
-          'test',
-          12346
-        )
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 1,
+            typeId: FAX,
+
+            archivedAt: future_datetime,
+            deleted: nil,
+            client_id: 123,
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 1,
+
+            dateEntered: future_date,
+            timeEntered: future_time,
+
+            sourceAsNumber: 2
+          )
+        ).do
+
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 2,
+            typeId: FAX,
+
+            archivedAt: later_future_datetime,
+            deleted: nil,
+            client_id: 123,
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 2,
+
+            dateEntered: later_future_date,
+            timeEntered: later_future_time,
+
+            sourceAsNumber: 2
+          )
+        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 2
       end
@@ -107,37 +265,55 @@ RSpec.describe DocumentAssignedEvents do
       it 'fetches only the events that happened after cursor date' do
         current_datetime = Time.now
 
-        future_datetime = current_datetime + 1.second
+        future_datetime = current_datetime + 1.minutes
         future_date = future_datetime.to_date
         future_time = future_datetime.strftime("%H:%M:%S")
 
-        earlier_datetime = current_datetime - 1.second
+        earlier_datetime = current_datetime - 1.minutes
         earlier_date = earlier_datetime.to_date
         earlier_time = earlier_datetime.strftime("%H:%M:%S")
 
         EventCursor.document_assigned_events_cursor = current_datetime
 
-        insert_command = @client.prepare(INSERT_STATEMENT)
-        insert_command.execute(
-          1234,
-          'doc type 1',
-          future_date,
-          '5555555555',
-          future_date,
-          future_time,
-          'test',
-          12345
-        )
-        insert_command.execute(
-          1235,
-          'doc type 1',
-          earlier_date,
-          '5555555555',
-          earlier_date,
-          earlier_time,
-          'test',
-          12346
-        )
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 1,
+            typeId: EMAILS,
+
+            archivedAt: future_datetime,
+            deleted: nil,
+            client_id: 123,
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 1,
+
+            dateEntered: future_date,
+            timeEntered: future_time,
+
+            sourceAsNumber: 2
+          )
+        ).do
+
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 2,
+            typeId: FAX,
+
+            archivedAt: earlier_datetime,
+            deleted: nil,
+            client_id: 123,
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 2,
+
+            dateEntered: earlier_date,
+            timeEntered: earlier_time,
+
+            sourceAsNumber: 2
+          )
+        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 1
       end
@@ -145,42 +321,70 @@ RSpec.describe DocumentAssignedEvents do
       it 'does not fetch events again' do
         EventCursor.document_assigned_events_cursor = Time.now - 1.hour
 
-        insert_command = @client.prepare(INSERT_STATEMENT)
         current_datetime = Time.now
         old_datetime = current_datetime - 10.minutes
         older_datetime = current_datetime - 20.minutes
         oldest_datetime = current_datetime - 30.minutes
 
-        insert_command.execute(
-          1235,
-          'doc type 1',
-          old_datetime.to_date,
-          '5555555555',
-          old_datetime.to_date,
-          (old_datetime).strftime("%H:%M:%S"),
-          'test',
-          12346
-        )
-        insert_command.execute(
-          1236,
-          'doc type 1',
-          older_datetime.to_date,
-          '5555555555',
-          older_datetime.to_date,
-          (older_datetime).strftime("%H:%M:%S"),
-          'test',
-          12347
-        )
-        insert_command.execute(
-          2345,
-          'doc type 2',
-          oldest_datetime.to_date,
-          '5555555555',
-          oldest_datetime.to_date,
-          (oldest_datetime).strftime("%H:%M:%S"),
-          'test',
-          12348
-        )
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 11,
+            typeId: EMAILS,
+
+            archivedAt: old_datetime,
+            deleted: nil,
+            client_id: 123,
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 4,
+
+            dateEntered: old_datetime.to_date,
+            timeEntered: old_datetime.strftime('%H:%M:%S'),
+
+            sourceAsNumber: 2
+          )
+        ).do
+
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 5,
+            typeId: SCANS,
+
+            archivedAt: older_datetime,
+            deleted: nil,
+            client_id: 123,
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 5,
+
+            dateEntered: older_datetime.to_date,
+            timeEntered: older_datetime.strftime("%H:%M:%S"),
+
+            sourceAsNumber: 2
+          )
+        ).do
+
+        result = @write_client.execute(
+          insert_statement(
+            doc_id: 6,
+            typeId: FAX,
+
+            archivedAt: oldest_datetime,
+            deleted: nil,
+            client_id: 123,
+            c17: '5551239876',
+            doc_type: 'RP - Redetermination',
+
+            instanceId: 2,
+
+            dateEntered: oldest_datetime.to_date,
+            timeEntered: oldest_datetime.strftime("%H:%M:%S"),
+
+            sourceAsNumber: 2
+          )
+        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0

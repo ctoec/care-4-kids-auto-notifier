@@ -1,4 +1,10 @@
 #!/bin/bash
 
-bundle exec rake db:create
-bundle exec rake db:schema:load
+function mysqlDbIsDown { mysqladmin -h $1 -u $2 --password=$3 status > /dev/null 2>&1 && echo "$?"; }
+
+while [ -z $(mysqlDbIsDown db root password)  ]; do
+    echo "waiting for application db to start working"
+    sleep 3s
+done
+
+bundle exec rake db:setup

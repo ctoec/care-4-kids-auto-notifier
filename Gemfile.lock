@@ -198,6 +198,7 @@ GEM
     thor (0.20.3)
     thread_safe (0.3.6)
     timecop (0.9.1)
+    tiny_tds (2.1.2)
     twilio-ruby (5.26.0)
       faraday (~> 0.9)
       jwt (>= 1.5, <= 2.5)
@@ -238,6 +239,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   timecop (~> 0.9.1)
+  tiny_tds
   twilio-ruby (~> 5.25)
   tzinfo-data
   web-console (>= 3.3.0)

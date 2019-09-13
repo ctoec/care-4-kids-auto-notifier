@@ -1,20 +1,56 @@
 #!/bin/bash
 
-mysql --host=$UNITEDWAYDB_HOST --user=$UNITEDWAYDB_ADMIN_USERNAME --password=$UNITEDWAYDB_ADMIN_PASSWORD << EOF
-CREATE USER IF NOT EXISTS '${UNITEDWAYDB_USERNAME}'@'%' IDENTIFIED BY '${UNITEDWAYDB_PASSWORD}';
-GRANT SELECT ON  ${UNITEDWAYDB_DATABASE} . * TO   '${UNITEDWAYDB_USERNAME}'@'%';
+function docuclassdbIsDown { sqlcmd -S $UNITEDWAYDB_HOST -U $SA_USERNAME -P $SA_PASSWORD -Q "EXEC sp_databases"  > /dev/null 2>&1 && echo "$?"; }
+while [ -z $(docuclassdbIsDown)  ]; do
+    echo "waiting for docuclass db to start working"
+    sleep 5s
+done
 
-CREATE DATABASE IF NOT EXISTS ${UNITEDWAYDB_DATABASE};
-USE ${UNITEDWAYDB_DATABASE};
+sqlSeverSetup=$(cat <<EOF
 
-CREATE TABLE IF NOT EXISTS document_assigned_index (
-    ClientID bigint,
-    DocType varchar(30) not null,
-    ReceivedDate date not null,
-    CallerID varchar(10),
-    ExportDate date not null,
-    ExportTime time not null,
-    Source varchar(20) not null,
-    DocID bigint not null
+CREATE DATABASE [Docuclass_Reporting];
+GO
+
+USE [Docuclass_Reporting];
+
+CREATE LOGIN ${UNITEDWAYDB_USERNAME} WITH PASSWORD = '${UNITEDWAYDB_PASSWORD}'
+GO
+
+USE [Docuclass_Reporting];
+CREATE USER [${UNITEDWAYDB_USERNAME}] FOR LOGIN [${UNITEDWAYDB_USERNAME}]
+GRANT SELECT ON DATABASE::[Docuclass_Reporting] TO [${UNITEDWAYDB_USERNAME}];
+EXEC sp_addrolemember N'db_datareader', N'${UNITEDWAYDB_USERNAME}'
+GO
+
+CREATE TABLE documents (
+    idDocuments INT NOT NULL,
+    TypeId INT NOT NULL,
+    ArchivedAt	smalldatetime,
+    Deleted	tinyint,
+    C2	varchar(255),
+    C17	varchar(255),
+    C1022	varchar(255)
 );
+
+CREATE TABLE types (
+    idTypes INT NOT NULL,
+    TypeName	varchar(255)
+)
+
+CREATE TABLE workflowinstances (
+	instanceID INT NOT NULL,
+    docID	INT
+)
+
+CREATE TABLE workflowsteps (
+    instancesID	INT,
+    DateEntered	datetime	NOT NULL,
+    TimeEntered	varchar(255)	NOT NULL,
+    QueueEneredID	INT,
+)
+GO
+
+
 EOF
+)
+sqlcmd -S $UNITEDWAYDB_HOST -U $SA_USERNAME -P $SA_PASSWORD -Q "$sqlSeverSetup"

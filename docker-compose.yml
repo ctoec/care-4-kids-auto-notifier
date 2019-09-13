@@ -16,10 +16,11 @@ services:
       - ./.env
     depends_on:
       - db
+      - docuclassdb
     networks:
      - app
-     - unitedway
      - jobs
+     - docuclass
     volumes:
     - .:/app
   jobs_runner:
@@ -34,12 +35,6 @@ services:
       - jobs
     volumes:
     - .:/app
-  unitedwaydb:
-    image: mariadb
-    environment: 
-      - MYSQL_ROOT_PASSWORD=password
-    networks:
-      - unitedway
   twilio_studio:
     image: node:8.10
     command: bash -c "while true; do sleep 10; done"
@@ -50,8 +45,14 @@ services:
     working_dir: /app
     networks: 
       - twilio
+  docuclassdb:
+    image: mcr.microsoft.com/mssql/server
+    env_file:
+      - ./.env
+    networks:
+      - docuclass
 networks:
   app:
-  unitedway:
   jobs:
   twilio:
+  docuclass:

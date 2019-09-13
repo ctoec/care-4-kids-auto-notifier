@@ -1,58 +1,63 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'sqlserver_helper'
 
 RSpec.describe 'Integration' do
-  client = Mysql2::Client.new(
-    host: ENV.fetch('UNITEDWAYDB_HOST'),
-    username: ENV.fetch('UNITEDWAYDB_ADMIN_USERNAME'),
-    password: ENV.fetch('UNITEDWAYDB_ADMIN_PASSWORD'),
-    database: ENV.fetch('UNITEDWAYDB_DATABASE')
-  )
-
+  
+  write_client = SQLServerClient.new
+  
   before(:each) do
+    write_client.setup_types_table
+    write_client.clean_database
+
     case_id = 7342
     cellphonenumber = '5551239876'
     
     EventCursor.create(key: 'document_assigned_event', time: Time.now - 1.day)
 
-    insert_statement = <<-SQL
-      INSERT INTO document_assigned_index(
-        ClientID,
-        DocType,
-        ReceivedDate,
-        CallerID,
-        ExportDate,
-        ExportTime,
-        Source,
-        DocID
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-    SQL
-
-    insert_command = client.prepare(insert_statement)
-    document_datetime = Time.now + 1.second
+    document_datetime = Time.now + 1.minutes
     document_date = document_datetime.to_date
     document_time = document_datetime.strftime("%H:%M:%S")
-    insert_command.execute(
-      case_id,
-      'doc type 1',
-      document_date,
-      cellphonenumber,
-      document_date,
-      document_time,
-      'test',
-      12345
-    )
-    insert_command.execute(
-      case_id,
-      'doc type 2',
-      document_date,
-      cellphonenumber,
-      document_date,
-      document_time,
-      'test',
-      12345
-    )
+    result = write_client.execute(
+      insert_statement(
+        doc_id: 1,
+        typeId: FAX,
+
+        archivedAt: document_datetime,
+        deleted: nil,
+        client_id: case_id,
+        c17: '5551239876',
+        doc_type: 'RP - Redetermination',
+
+        instanceId: 1,
+
+        dateEntered: document_date,
+        timeEntered: document_time,
+
+        sourceAsNumber: FAX
+      )
+    ).do
+
+    result = write_client.execute(
+      insert_statement(
+        doc_id: 2,
+        typeId: FAX,
+
+        archivedAt: document_datetime,
+        deleted: nil,
+        client_id: case_id,
+        c17: '5551239876',
+        doc_type: 'RP - Redetermination',
+
+        instanceId: 2,
+
+        dateEntered: document_date,
+        timeEntered: document_time,
+
+        sourceAsNumber: FAX
+      )
+    ).do
 
     Parent.create(caseid: case_id, cellphonenumber: cellphonenumber, active: true)
   end
@@ -65,7 +70,6 @@ RSpec.describe 'Integration' do
   end
 
   after(:each) do
-    client.query('DELETE FROM document_assigned_index')
     Parent.delete_all
     FakeSender.reset
   end

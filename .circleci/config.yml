@@ -2,7 +2,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.6.3-node-browsers
+      - image: stateofct/ctoec-care-4-kids-notifier
+      - image: mcr.microsoft.com/mssql/server
+        environment:
+          SA_PASSWORD: A*Strong@Password!
+          ACCEPT_EULA: Y
+          SA_USERNAME: SA
       - image: circleci/mariadb:latest
         environment:
           MYSQL_USER: root
@@ -22,27 +27,22 @@ jobs:
           command: |
             gem install bundler
             bundle install --jobs=4 --retry=3 --path vendor/bundle
-
       - save_cache:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       - run:
-          name: wait for database
-          command: |
-            sudo apt-get update -q
-            sudo apt-get install -y mariadb-client
-            function dbIsDown { mysqladmin -h 127.0.0.1 -u root --password=password status  > /dev/null 2>&1 && echo "$?"; }
-            while [ -z $(dbIsDown)  ]; do
-                echo "waiting for mysql to start working"
-                sleep 5s
-            done
-      
-      - run:
           name: setup database
           command: |
-            ./scripts/setupRailsDatabase
+            function mysqlDbIsDown { mysqladmin -h $1 -u $2 --password=$3 status > /dev/null 2>&1 && echo "$?"; }
+            while [ -z $(mysqlDbIsDown 127.0.0.1 root password)  ]; do
+                echo "waiting for application db to start working"
+                sleep 3s
+            done
+
+            bundle exec rake db:setup
+
             ./scripts/setupUWDatabase
       - run:
           name: run tests

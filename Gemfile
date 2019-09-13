@@ -7,6 +7,8 @@ ruby '2.6.3'
 gem 'rails', '~> 6.0.0'
 # Use mariadb (mysql-clone) as the database for Active Record
 gem 'mysql2'
+# Use tiny_tds for connecting to sqlserver
+gem 'tiny_tds'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 gem 'dotenv-rails'
