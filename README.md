@@ -63,3 +63,9 @@ bundle exec whenever --update-crontab
 1. run `cap production deploy`
 
 
+## Pushing Container image for CircleCI to Docker Hub
+```
+docker login
+docker build . -t stateofct/ctoec-care-4-kids-notifier
+docker push stateofct/ctoec-care-4-kids-notifier
+```
