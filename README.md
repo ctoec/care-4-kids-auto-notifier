@@ -15,9 +15,9 @@ DATABASE_URL=mysql2://root:password@db
 UNITEDWAYDB_HOST=docuclassdb
 UNITEDWAYDB_USERNAME=skylight
 UNITEDWAYDB_PASSWORD=$(cat /dev/random | dd ibs=10 count=1 status=none | base64)
+SA_USERNAME=SA
 SA_PASSWORD=A*Strong@Password!
 ACCEPT_EULA=Y
-SA_USERNAME=SA
 C4K_SMS_NUMBER=<SMS Provider Number>
 TWILIO_ACCOUNT_SID=<Account SID>
 TWILIO_AUTH_TOKEN=<Auth Token>

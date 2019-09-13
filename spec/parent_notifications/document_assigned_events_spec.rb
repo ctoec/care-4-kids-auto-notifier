@@ -28,10 +28,9 @@ RSpec.describe DocumentAssignedEvents do
         document_datetime = Time.now + 1.minutes
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 1,
-            typeId: FAX,
+            typeId: SQLServerClient::FAX,
 
             archivedAt: document_datetime,
             deleted: nil,
@@ -44,9 +43,7 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: document_date,
             timeEntered: document_time,
 
-            sourceAsNumber: FAX
-          )
-        ).do
+        )
 
         event = DocumentAssignedEvents.fetch_all_new.first
         expect(event.caseid).to eql '1'
@@ -61,10 +58,9 @@ RSpec.describe DocumentAssignedEvents do
         document_datetime = Time.now + 1.minutes
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 1,
-            typeId: DELETED,
+            typeId: SQLServerClient::DELETED,
 
             archivedAt: document_datetime,
             deleted: nil,
@@ -77,9 +73,7 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: document_date,
             timeEntered: document_time,
 
-            sourceAsNumber: DELETED
           )
-        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
       end
@@ -90,10 +84,9 @@ RSpec.describe DocumentAssignedEvents do
         document_datetime = Time.now + 1.minutes
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 1,
-            typeId: FAX,
+            typeId: SQLServerClient::FAX,
 
             archivedAt: document_datetime,
             deleted: 1,
@@ -106,9 +99,7 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: document_date,
             timeEntered: document_time,
 
-            sourceAsNumber: FAX
           )
-        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
       end
@@ -119,10 +110,9 @@ RSpec.describe DocumentAssignedEvents do
         document_datetime = Time.now + 1.minutes
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 1,
-            typeId: FAX,
+            typeId: SQLServerClient::FAX,
 
             archivedAt: document_datetime,
             deleted: nil,
@@ -135,14 +125,11 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: document_date,
             timeEntered: document_time,
 
-            sourceAsNumber: FAX
           )
-        ).do
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 2,
-            typeId: EMAILS,
+            typeId: SQLServerClient::EMAILS,
 
             archivedAt: document_datetime,
             deleted: nil,
@@ -155,14 +142,11 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: document_date,
             timeEntered: document_time,
 
-            sourceAsNumber: EMAILS
           )
-        ).do
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 3,
-            typeId: SCANS,
+            typeId: SQLServerClient::SCANS,
 
             archivedAt: document_datetime,
             deleted: nil,
@@ -175,14 +159,11 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: document_date,
             timeEntered: document_time,
 
-            sourceAsNumber: SCANS
           )
-        ).do
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 5,
-            typeId: OTHER,
+            typeId: SQLServerClient::OTHER,
 
             archivedAt: document_datetime,
             deleted: nil,
@@ -195,9 +176,7 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: document_date,
             timeEntered: document_time,
 
-            sourceAsNumber: OTHER
           )
-        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
       end
@@ -217,10 +196,9 @@ RSpec.describe DocumentAssignedEvents do
 
         EventCursor.document_assigned_events_cursor = current_datetime
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 1,
-            typeId: FAX,
+            typeId: SQLServerClient::FAX,
 
             archivedAt: future_datetime,
             deleted: nil,
@@ -233,14 +211,11 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: future_date,
             timeEntered: future_time,
 
-            sourceAsNumber: 2
           )
-        ).do
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 2,
-            typeId: FAX,
+            typeId: SQLServerClient::FAX,
 
             archivedAt: later_future_datetime,
             deleted: nil,
@@ -253,9 +228,7 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: later_future_date,
             timeEntered: later_future_time,
 
-            sourceAsNumber: 2
           )
-        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 2
       end
@@ -275,10 +248,9 @@ RSpec.describe DocumentAssignedEvents do
 
         EventCursor.document_assigned_events_cursor = current_datetime
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 1,
-            typeId: EMAILS,
+            typeId: SQLServerClient::EMAILS,
 
             archivedAt: future_datetime,
             deleted: nil,
@@ -291,14 +263,11 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: future_date,
             timeEntered: future_time,
 
-            sourceAsNumber: 2
           )
-        ).do
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 2,
-            typeId: FAX,
+            typeId: SQLServerClient::FAX,
 
             archivedAt: earlier_datetime,
             deleted: nil,
@@ -311,9 +280,7 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: earlier_date,
             timeEntered: earlier_time,
 
-            sourceAsNumber: 2
           )
-        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 1
       end
@@ -326,10 +293,9 @@ RSpec.describe DocumentAssignedEvents do
         older_datetime = current_datetime - 20.minutes
         oldest_datetime = current_datetime - 30.minutes
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 11,
-            typeId: EMAILS,
+            typeId: SQLServerClient::EMAILS,
 
             archivedAt: old_datetime,
             deleted: nil,
@@ -342,14 +308,11 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: old_datetime.to_date,
             timeEntered: old_datetime.strftime('%H:%M:%S'),
 
-            sourceAsNumber: 2
           )
-        ).do
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 5,
-            typeId: SCANS,
+            typeId: SQLServerClient::SCANS,
 
             archivedAt: older_datetime,
             deleted: nil,
@@ -362,14 +325,11 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: older_datetime.to_date,
             timeEntered: older_datetime.strftime("%H:%M:%S"),
 
-            sourceAsNumber: 2
           )
-        ).do
 
-        result = @write_client.execute(
-          insert_statement(
+        result = @write_client.insert(
             doc_id: 6,
-            typeId: FAX,
+            typeId: SQLServerClient::FAX,
 
             archivedAt: oldest_datetime,
             deleted: nil,
@@ -382,9 +342,7 @@ RSpec.describe DocumentAssignedEvents do
             dateEntered: oldest_datetime.to_date,
             timeEntered: oldest_datetime.strftime("%H:%M:%S"),
 
-            sourceAsNumber: 2
           )
-        ).do
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0

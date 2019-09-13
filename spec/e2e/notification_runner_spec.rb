@@ -19,10 +19,9 @@ RSpec.describe 'Integration' do
     document_datetime = Time.now + 1.minutes
     document_date = document_datetime.to_date
     document_time = document_datetime.strftime("%H:%M:%S")
-    result = write_client.execute(
-      insert_statement(
+    result = write_client.insert(
         doc_id: 1,
-        typeId: FAX,
+        typeId: SQLServerClient::FAX,
 
         archivedAt: document_datetime,
         deleted: nil,
@@ -35,14 +34,11 @@ RSpec.describe 'Integration' do
         dateEntered: document_date,
         timeEntered: document_time,
 
-        sourceAsNumber: FAX
       )
-    ).do
 
-    result = write_client.execute(
-      insert_statement(
+    result = write_client.insert(
         doc_id: 2,
-        typeId: FAX,
+        typeId: SQLServerClient::FAX,
 
         archivedAt: document_datetime,
         deleted: nil,
@@ -55,9 +51,7 @@ RSpec.describe 'Integration' do
         dateEntered: document_date,
         timeEntered: document_time,
 
-        sourceAsNumber: FAX
       )
-    ).do
 
     Parent.create(caseid: case_id, cellphonenumber: cellphonenumber, active: true)
   end
