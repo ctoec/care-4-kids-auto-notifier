@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_06_161253) do
+ActiveRecord::Schema.define(version: 2019_09_12_004017) do
 
   create_table "delayed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -34,6 +34,17 @@ ActiveRecord::Schema.define(version: 2019_09_06_161253) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "failed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "jobid"
+    t.datetime "failed_at"
+    t.bigint "notification_id", null: false
+    t.bigint "parent_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["notification_id"], name: "index_failed_jobs_on_notification_id"
+    t.index ["parent_id"], name: "index_failed_jobs_on_parent_id"
+  end
+
   create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "encrypted_message_text"
     t.string "encrypted_message_text_iv"
@@ -50,4 +61,6 @@ ActiveRecord::Schema.define(version: 2019_09_06_161253) do
     t.boolean "active", default: false, null: false
   end
 
+  add_foreign_key "failed_jobs", "notifications"
+  add_foreign_key "failed_jobs", "parents"
 end
