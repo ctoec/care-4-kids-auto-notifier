@@ -42,6 +42,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem "capistrano-rvm"
+  gem 'capistrano3-delayed-job', '~> 1.0'
 end
 
 group :test do

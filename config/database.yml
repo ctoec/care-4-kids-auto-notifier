@@ -1,14 +1,14 @@
 development: &default
   adapter: mysql2
-  database: backbone_data_bootstrap_development
   min_messages: WARNING
   pool: 5
   url: <%= ENV['DATABASE_URL'] %>
+  database: <%= ENV['DATABASE_NAME'] + "_development" %>
 
 test:
   <<: *default
-  database: backbone_data_bootstrap_test
+  database: <%= ENV['DATABASE_NAME'] + "test" %>
 
 production:
   <<: *default
-  database: backbone_data_bootstrap_production
+  database: <%= ENV['DATABASE_NAME'] %>

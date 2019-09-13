@@ -12,6 +12,7 @@ cat << EOF > .env
 CELLPHONENUMBER_ENCRYPTION_KEY=$(cat /dev/random | dd ibs=32 count=1 status=none | base64)
 MESSAGE_TEXT_ENCRYPTION_KEY=$(cat /dev/random | dd ibs=32 count=1 status=none | base64)
 DATABASE_URL=mysql2://root:password@db
+DATABASE_NAME=unitedwayetl
 UNITEDWAYDB_HOST=docuclassdb
 UNITEDWAYDB_USERNAME=skylight
 UNITEDWAYDB_PASSWORD=$(cat /dev/random | dd ibs=10 count=1 status=none | base64)
@@ -57,7 +58,7 @@ bundle exec whenever --update-crontab
 1. Set `SERVER_IP` env variable. This is the target server IP address.
 1. Run `cap production deploy` 
 1. ssh into server and add .env from lastpass file into the `/home/rails/railsapps/care-4-kids-auto-notifier/shared` folder
-1. run `cap production deploy:updated`
+1. run `cap production deploy`
 
 ### Deploys after the inital deploy
 1. run `cap production deploy`
