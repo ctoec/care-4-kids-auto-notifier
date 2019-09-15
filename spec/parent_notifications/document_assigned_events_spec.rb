@@ -29,20 +29,19 @@ RSpec.describe DocumentAssignedEvents do
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
         result = @write_client.insert(
-            doc_id: 1,
-            typeId: SQLServerClient::FAX,
+          doc_id: 1,
+          typeId: SQLServerClient::FAX,
 
-            archivedAt: document_datetime,
-            deleted: nil,
-            client_id: '1',
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: document_datetime,
+          deleted: nil,
+          client_id: '1',
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 1,
+          instanceId: 1,
 
-            dateEntered: document_date,
-            timeEntered: document_time,
-
+          dateEntered: document_date,
+          timeEntered: document_time,
         )
 
         event = DocumentAssignedEvents.fetch_all_new.first
@@ -59,21 +58,20 @@ RSpec.describe DocumentAssignedEvents do
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
         result = @write_client.insert(
-            doc_id: 1,
-            typeId: SQLServerClient::DELETED,
+          doc_id: 1,
+          typeId: SQLServerClient::DELETED,
 
-            archivedAt: document_datetime,
-            deleted: nil,
-            client_id: '1',
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: document_datetime,
+          deleted: nil,
+          client_id: '1',
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 1,
+          instanceId: 1,
 
-            dateEntered: document_date,
-            timeEntered: document_time,
-
-          )
+          dateEntered: document_date,
+          timeEntered: document_time,
+        )
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
       end
@@ -85,21 +83,20 @@ RSpec.describe DocumentAssignedEvents do
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
         result = @write_client.insert(
-            doc_id: 1,
-            typeId: SQLServerClient::FAX,
+          doc_id: 1,
+          typeId: SQLServerClient::FAX,
 
-            archivedAt: document_datetime,
-            deleted: 1,
-            client_id: '1',
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: document_datetime,
+          deleted: 1,
+          client_id: '1',
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 1,
+          instanceId: 1,
 
-            dateEntered: document_date,
-            timeEntered: document_time,
-
-          )
+          dateEntered: document_date,
+          timeEntered: document_time,
+        )
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
       end
@@ -111,72 +108,68 @@ RSpec.describe DocumentAssignedEvents do
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
         result = @write_client.insert(
-            doc_id: 1,
-            typeId: SQLServerClient::FAX,
+          doc_id: 1,
+          typeId: SQLServerClient::FAX,
 
-            archivedAt: document_datetime,
-            deleted: nil,
-            client_id: '1',
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: document_datetime,
+          deleted: nil,
+          client_id: '1',
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 1,
+          instanceId: 1,
 
-            dateEntered: document_date,
-            timeEntered: document_time,
-
-          )
-
-        result = @write_client.insert(
-            doc_id: 2,
-            typeId: SQLServerClient::EMAILS,
-
-            archivedAt: document_datetime,
-            deleted: nil,
-            client_id: '1',
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
-
-            instanceId: 2,
-
-            dateEntered: document_date,
-            timeEntered: document_time,
-
-          )
+          dateEntered: document_date,
+          timeEntered: document_time,
+        )
 
         result = @write_client.insert(
-            doc_id: 3,
-            typeId: SQLServerClient::SCANS,
+          doc_id: 2,
+          typeId: SQLServerClient::EMAILS,
 
-            archivedAt: document_datetime,
-            deleted: nil,
-            client_id: '1',
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: document_datetime,
+          deleted: nil,
+          client_id: '1',
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 3,
+          instanceId: 2,
 
-            dateEntered: document_date,
-            timeEntered: document_time,
-
-          )
+          dateEntered: document_date,
+          timeEntered: document_time,
+        )
 
         result = @write_client.insert(
-            doc_id: 5,
-            typeId: SQLServerClient::OTHER,
+          doc_id: 3,
+          typeId: SQLServerClient::SCANS,
 
-            archivedAt: document_datetime,
-            deleted: nil,
-            client_id: '1',
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: document_datetime,
+          deleted: nil,
+          client_id: '1',
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 5,
+          instanceId: 3,
 
-            dateEntered: document_date,
-            timeEntered: document_time,
+          dateEntered: document_date,
+          timeEntered: document_time,
+        )
 
-          )
+        result = @write_client.insert(
+          doc_id: 5,
+          typeId: SQLServerClient::OTHER,
+
+          archivedAt: document_datetime,
+          deleted: nil,
+          client_id: '1',
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
+
+          instanceId: 5,
+
+          dateEntered: document_date,
+          timeEntered: document_time,
+        )
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
       end
@@ -197,38 +190,36 @@ RSpec.describe DocumentAssignedEvents do
         EventCursor.document_assigned_events_cursor = current_datetime
 
         result = @write_client.insert(
-            doc_id: 1,
-            typeId: SQLServerClient::FAX,
+          doc_id: 1,
+          typeId: SQLServerClient::FAX,
 
-            archivedAt: future_datetime,
-            deleted: nil,
-            client_id: 123,
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: future_datetime,
+          deleted: nil,
+          client_id: 123,
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 1,
+          instanceId: 1,
 
-            dateEntered: future_date,
-            timeEntered: future_time,
-
-          )
+          dateEntered: future_date,
+          timeEntered: future_time,
+        )
 
         result = @write_client.insert(
-            doc_id: 2,
-            typeId: SQLServerClient::FAX,
+          doc_id: 2,
+          typeId: SQLServerClient::FAX,
 
-            archivedAt: later_future_datetime,
-            deleted: nil,
-            client_id: 123,
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: later_future_datetime,
+          deleted: nil,
+          client_id: 123,
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 2,
+          instanceId: 2,
 
-            dateEntered: later_future_date,
-            timeEntered: later_future_time,
-
-          )
+          dateEntered: later_future_date,
+          timeEntered: later_future_time,
+        )
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 2
       end
@@ -249,38 +240,36 @@ RSpec.describe DocumentAssignedEvents do
         EventCursor.document_assigned_events_cursor = current_datetime
 
         result = @write_client.insert(
-            doc_id: 1,
-            typeId: SQLServerClient::EMAILS,
+          doc_id: 1,
+          typeId: SQLServerClient::EMAILS,
 
-            archivedAt: future_datetime,
-            deleted: nil,
-            client_id: 123,
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: future_datetime,
+          deleted: nil,
+          client_id: 123,
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 1,
+          instanceId: 1,
 
-            dateEntered: future_date,
-            timeEntered: future_time,
-
-          )
+          dateEntered: future_date,
+          timeEntered: future_time,
+        )
 
         result = @write_client.insert(
-            doc_id: 2,
-            typeId: SQLServerClient::FAX,
+          doc_id: 2,
+          typeId: SQLServerClient::FAX,
 
-            archivedAt: earlier_datetime,
-            deleted: nil,
-            client_id: 123,
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: earlier_datetime,
+          deleted: nil,
+          client_id: 123,
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 2,
+          instanceId: 2,
 
-            dateEntered: earlier_date,
-            timeEntered: earlier_time,
-
-          )
+          dateEntered: earlier_date,
+          timeEntered: earlier_time,
+        )
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 1
       end
@@ -294,55 +283,52 @@ RSpec.describe DocumentAssignedEvents do
         oldest_datetime = current_datetime - 30.minutes
 
         result = @write_client.insert(
-            doc_id: 11,
-            typeId: SQLServerClient::EMAILS,
+          doc_id: 11,
+          typeId: SQLServerClient::EMAILS,
 
-            archivedAt: old_datetime,
-            deleted: nil,
-            client_id: 123,
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: old_datetime,
+          deleted: nil,
+          client_id: 123,
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 4,
+          instanceId: 4,
 
-            dateEntered: old_datetime.to_date,
-            timeEntered: old_datetime.strftime('%H:%M:%S'),
-
-          )
-
-        result = @write_client.insert(
-            doc_id: 5,
-            typeId: SQLServerClient::SCANS,
-
-            archivedAt: older_datetime,
-            deleted: nil,
-            client_id: 123,
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
-
-            instanceId: 5,
-
-            dateEntered: older_datetime.to_date,
-            timeEntered: older_datetime.strftime("%H:%M:%S"),
-
-          )
+          dateEntered: old_datetime.to_date,
+          timeEntered: old_datetime.strftime('%H:%M:%S')
+        )
 
         result = @write_client.insert(
-            doc_id: 6,
-            typeId: SQLServerClient::FAX,
+          doc_id: 5,
+          typeId: SQLServerClient::SCANS,
 
-            archivedAt: oldest_datetime,
-            deleted: nil,
-            client_id: 123,
-            c17: '5551239876',
-            doc_type: 'RP - Redetermination',
+          archivedAt: older_datetime,
+          deleted: nil,
+          client_id: 123,
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
 
-            instanceId: 2,
+          instanceId: 5,
 
-            dateEntered: oldest_datetime.to_date,
-            timeEntered: oldest_datetime.strftime("%H:%M:%S"),
+          dateEntered: older_datetime.to_date,
+          timeEntered: older_datetime.strftime("%H:%M:%S")
+        )
 
-          )
+        result = @write_client.insert(
+          doc_id: 6,
+          typeId: SQLServerClient::FAX,
+
+          archivedAt: oldest_datetime,
+          deleted: nil,
+          client_id: 123,
+          c17: '5551239876',
+          doc_type: 'RP - Redetermination',
+
+          instanceId: 2,
+
+          dateEntered: oldest_datetime.to_date,
+          timeEntered: oldest_datetime.strftime("%H:%M:%S")
+        )
 
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
         expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
@@ -367,25 +353,21 @@ RSpec.describe DocumentAssignedEvents do
         'PS – Provider Supporting Document',
       ].each do |doc_type|
         counter += 1
-        result = @write_client.execute(
-          insert_statement(
-            doc_id: counter,
-            typeId: FAX,
+        result = @write_client.insert(
+          doc_id: counter,
+          typeId: SQLServerClient::FAX,
 
-            archivedAt: document_datetime,
-            deleted: nil,
-            client_id: counter.to_s,
-            c17: '5551239876',
-            doc_type: doc_type,
+          archivedAt: document_datetime,
+          deleted: nil,
+          client_id: counter.to_s,
+          c17: '5551239876',
+          doc_type: doc_type,
 
-            instanceId: counter,
+          instanceId: counter,
 
-            dateEntered: document_date,
-            timeEntered: document_time,
-
-            sourceAsNumber: FAX
-          )
-        ).do
+          dateEntered: document_date,
+          timeEntered: document_time
+        )
       end
       expect(DocumentAssignedEvents.fetch_all_new.length).to eql counter
     end
@@ -398,25 +380,48 @@ RSpec.describe DocumentAssignedEvents do
       document_datetime = Time.now + 1.minutes
       document_date = document_datetime.to_date
       document_time = document_datetime.strftime("%H:%M:%S")
-      result = @write_client.execute(
-        insert_statement(
-          doc_id: 1,
-          typeId: FAX,
+      result = @write_client.insert(
+        doc_id: 1,
+        typeId: SQLServerClient::FAX,
 
-          archivedAt: document_datetime,
-          deleted: nil,
-          client_id: '1',
-          c17: '5551239876',
-          doc_type: 'not a valid document type',
+        archivedAt: document_datetime,
+        deleted: nil,
+        client_id: '1',
+        c17: '5551239876',
+        doc_type: 'not a valid document type',
 
-          instanceId: 1,
+        instanceId: 1,
 
-          dateEntered: document_date,
-          timeEntered: document_time,
+        dateEntered: document_date,
+        timeEntered: document_time
+      )
 
-          sourceAsNumber: FAX
-        )
-      ).do
+      expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+    end
+  end
+
+  context 'when an event has an invalid source type' do
+    it 'does not return the event' do
+      EventCursor.document_assigned_events_cursor = Time.now
+
+      document_datetime = Time.now + 1.minutes
+      document_date = document_datetime.to_date
+      document_time = document_datetime.strftime("%H:%M:%S")
+      result = @write_client.insert(
+        doc_id: 1,
+        typeId: SQLServerClient::INVALID,
+
+        archivedAt: document_datetime,
+        deleted: nil,
+        client_id: '1',
+        c17: '5551239876',
+        doc_type: 'RP - Redetermination',
+
+        instanceId: 1,
+
+        dateEntered: document_date,
+        timeEntered: document_time
+      )
 
       expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
     end
