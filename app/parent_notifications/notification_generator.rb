@@ -26,7 +26,6 @@ class NotificationGenerator
   end
   
   def build_document_received_message(type:, source:, date:)
-    # Formats to single line
     <<-string.gsub(/\s+/, " ").strip
       This is Care 4 Kids!
       We have received your #{type}
