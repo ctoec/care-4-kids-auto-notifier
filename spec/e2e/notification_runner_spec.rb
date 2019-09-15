@@ -58,7 +58,7 @@ RSpec.describe 'Integration' do
 
   context 'parent is active' do
     it 'sends notifications' do
-      NotificationRunner.schedule_notifications(sender: FakeSender)
+      NotificationRunner.schedule_notifications(sender: FakeSender, scheduler: ImmediateScheduler)
       expect(FakeSender.messages.size).to eq 2
     end
   end

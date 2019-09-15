@@ -1,9 +1,9 @@
 class NotificationRunner
-    def self.schedule_notifications(sender:)
+    def self.schedule_notifications(sender:, scheduler:)
         message_queue = NotificationQueue.new(
             job: NotificationSendJob, 
             sender: sender, 
-            scheduler: ImmediateScheduler
+            scheduler: scheduler
         )
         notification_generator = NotificationGenerator.new(
             document_assigned_events: DocumentAssignedEvents

@@ -1,1 +1,1 @@
-NotificationRunner.schedule_notifications(sender: TwilioSender)
+NotificationRunner.schedule_notifications(sender: TwilioSender, scheduler: WakingHoursScheduler)
