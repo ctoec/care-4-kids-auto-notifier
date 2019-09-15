@@ -1,30 +1,10 @@
 class SQLServerClient
-
   FAX = 2
   EMAILS = 15
   SCANS = 17
   DELETED = 4
   OTHER = 20
-
-  def initialize
-    @client = TinyTds::Client.new(
-      username: ENV.fetch('SA_USERNAME'),
-      password: ENV.fetch('SA_PASSWORD'),
-      host: ENV.fetch('UNITEDWAYDB_HOST'),
-      port: 1433,
-      database: 'Docuclass_Reporting',
-      azure: false
-    )
-  end
-
-  def clean_database
-    query = <<-SQL
-         DELETE FROM documents
-         DELETE FROM workflowinstances
-         DELETE FROM workflowsteps
-    SQL
-    @client.execute(query).do
-  end
+  INVALID = 99
 
   def setup_types_table
     @client.execute("DELETE FROM types").do
@@ -66,6 +46,14 @@ class SQLServerClient
            ) VALUES (
              #{OTHER},
              "Other"
+           );
+
+           INSERT INTO types (
+             idTypes,
+             TypeName
+           ) VALUES (
+             #{INVALID},
+             "Invalid"
            );
     SQL
 
