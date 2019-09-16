@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_12_004017) do
+ActiveRecord::Schema.define(version: 2019_09_16_185639) do
 
   create_table "delayed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 2019_09_12_004017) do
   end
 
   create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "encrypted_message_text"
+    t.text "encrypted_message_text"
     t.string "encrypted_message_text_iv"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 2019_09_12_004017) do
     t.string "encrypted_cellphonenumber_iv"
     t.string "caseid"
     t.boolean "active", default: false, null: false
+    t.integer "notifications_generated_count", default: 0, null: false
   end
 
   add_foreign_key "failed_jobs", "notifications"
