@@ -3,7 +3,6 @@
 class Parent < ApplicationRecord
   validates :cellphonenumber, format: { with: /[0-9]{10}/, message: "Please enter a ten digit phone number in the format xxxxxxxxxx" }
   validates :active, inclusion: [true, false]
-  # validates :caseid, format: { }
 
   @@CELLPHONENUMBER_ENCRYPTION_KEY = Base64.decode64 ENV.fetch 'CELLPHONENUMBER_ENCRYPTION_KEY'
 
