@@ -69,7 +69,7 @@ RSpec.describe 'Integration' do
       timeEntered: document_time,
     )
 
-    Parent.create(caseid: case_id, cellphonenumber: cellphonenumber, active: true)
+    Parent.create(caseid: case_id, cellphonenumber: cellphonenumber, active: true, notifications_generated_count: 1)
   end
 
   context 'parent is active' do

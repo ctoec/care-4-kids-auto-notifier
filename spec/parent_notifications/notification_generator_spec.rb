@@ -24,7 +24,7 @@ RSpec.describe NotificationGenerator do
         caseid = (rand 100).to_s
         document_assigned_events = build_document_assigned_events_stub(
           parents: [
-            Parent.create(caseid: caseid, cellphonenumber: '+5555555555', active: true)
+            Parent.create(caseid: caseid, cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1)
           ],
           time: time
         )
@@ -36,6 +36,37 @@ RSpec.describe NotificationGenerator do
         stored_notification = Notification.last
         expect(stored_notification.message_text).to eql 'This is Care 4 Kids! We have received your some doc by fax on 01/01/2010. You will be notified if there is any missing information.'
       end
+
+      it 'generates a message reminding the recipient of the instructions if they are receiving their first message' do
+        caseid = (rand 100).to_s
+        document_assigned_events = build_document_assigned_events_stub(
+          parents: [
+            Parent.create(caseid: caseid, cellphonenumber: '+5555555555', active: true)
+          ]
+        )
+        notification_generator = NotificationGenerator.new(
+          document_assigned_events: document_assigned_events
+        )
+
+        notification_events = fetch_all_new notification_generator
+        stored_notification = Notification.last
+        expect(stored_notification.message_text).to eql "You can text STATUS for information on Care 4 Kids processing dates. Questions or feedback about these notifications? Text QUESTION anytime to retrieve this link: http://bit.ly/Care4KidsPilot. Text REMOVE to stop participating in the pilot program and receiving notifications."
+      end
+
+      it 'does not generate a message reminding the recipient of the instructions if they are not receiving their first message' do
+        caseid = (rand 100).to_s
+        document_assigned_events = build_document_assigned_events_stub(
+          parents: [
+            Parent.create(caseid: caseid, cellphonenumber: '5555555555', active: true, notifications_generated_count: 1)
+          ]
+        )
+        notification_generator = NotificationGenerator.new(
+          document_assigned_events: document_assigned_events
+        )
+
+        notification_events = fetch_all_new notification_generator
+        expect(notification_events.length).to eql 1
+      end
     end
 
     context 'there are multiple events that have corresponding active parents' do
@@ -43,8 +74,8 @@ RSpec.describe NotificationGenerator do
         time = Time.new(2010,1,1,0,0,0)
         document_assigned_events = build_document_assigned_events_stub(
           parents: [
-            Parent.create(caseid: 'x', cellphonenumber: '+5555555555', active: true),
-            Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true)
+            Parent.create(caseid: 'x', cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1),
+            Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1)
           ],
           time: time
         )
@@ -60,7 +91,7 @@ RSpec.describe NotificationGenerator do
         time = Time.new(2010,1,1,0,0,0)
         Parent.create(caseid: 'x', cellphonenumber: '+5555555555', active: true)
         parents = [
-          Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true)
+          Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1)
         ]
         document_assigned_events = build_document_assigned_events_stub(
           parents: parents,
@@ -112,7 +143,7 @@ RSpec.describe NotificationGenerator do
         time = Time.new(2010,1,1,0,0,0)
         Parent.create(caseid: 'x', cellphonenumber: '+5555555555', active: false)
         parents = [
-          Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true)
+          Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1)
         ]
         document_assigned_events = build_document_assigned_events_stub(
           parents: parents,

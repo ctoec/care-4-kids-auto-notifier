@@ -11,8 +11,8 @@ class NotificationGenerator
       if parent_is_active(found_parent)
         yield build_notification_event(event: event)
         found_parent.increment!(:notifications_generated_count)
+        yield build_instructions_reminder_event(event: event) if found_parent.notifications_generated_count == 1
       end
-      yield build_instructions_reminder_event(event: event) if found_parent.notifications_generated_count == 1
     end
   end
 
