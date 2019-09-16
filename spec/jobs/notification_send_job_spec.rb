@@ -10,7 +10,7 @@ RSpec.describe NotificationSendJob do
   context 'when a notification event is supplied' do
     it '.perform is called with the corresponding message and cell phone numbers' do
       message_text = 'This is a message'
-      cellphonenumber = '234567890'
+      cellphonenumber = '2345678900'
       caseid = rand(100).to_s
 
       sender = double
@@ -31,7 +31,7 @@ RSpec.describe NotificationSendJob do
   context 'when sender throws an error after perform_now' do
     it 'a failed job object is created with corresponding job id, notification id, and parent id' do
       message_text = 'This is a message'
-      cellphonenumber = '234567890'
+      cellphonenumber = '2345678900'
       caseid = rand(100).to_s
 
       sender = double
@@ -58,7 +58,7 @@ RSpec.describe NotificationSendJob do
   context 'when sender throws an error after perform_later' do
     it 'a failed job object is created with corresponding notification id, and parent id' do
       message_text = 'This is a message'
-      cellphonenumber = '234567890'
+      cellphonenumber = '2345678900'
       caseid = rand(100).to_s
 
       parent = Parent.create(caseid: caseid, cellphonenumber: cellphonenumber)

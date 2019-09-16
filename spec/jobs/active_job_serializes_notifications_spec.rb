@@ -11,7 +11,7 @@ RSpec.describe NotificationSendJob do
   context 'when a notification is enqueued for later with real ActiveRecord objects' do
     it 'executes from the delayed_jobs table' do
       message_text = 'This is a message'
-      cellphonenumber = '234567890'
+      cellphonenumber = '2345678900'
       caseid = rand(100).to_s
 
       Parent.create(caseid: caseid, cellphonenumber: cellphonenumber)
