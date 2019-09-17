@@ -39,10 +39,12 @@ RSpec.describe NotificationGenerator do
 
       it 'generates a message reminding the recipient of the instructions if they are receiving their first message' do
         caseid = (rand 100).to_s
+        time = Time.new(2010,1,1,0,0,0)
         document_assigned_events = build_document_assigned_events_stub(
           parents: [
             Parent.create(caseid: caseid, cellphonenumber: '+5555555555', active: true)
-          ]
+          ],
+          time: time
         )
         notification_generator = NotificationGenerator.new(
           document_assigned_events: document_assigned_events
@@ -55,10 +57,12 @@ RSpec.describe NotificationGenerator do
 
       it 'does not generate a message reminding the recipient of the instructions if they are not receiving their first message' do
         caseid = (rand 100).to_s
+        time = Time.new(2010,1,1,0,0,0)
         document_assigned_events = build_document_assigned_events_stub(
           parents: [
             Parent.create(caseid: caseid, cellphonenumber: '5555555555', active: true, notifications_generated_count: 1)
-          ]
+          ],
+          time: time
         )
         notification_generator = NotificationGenerator.new(
           document_assigned_events: document_assigned_events
