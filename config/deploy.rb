@@ -1,14 +1,14 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.11.1"
 
-set :application, "care-4-kids-auto-notifier-2"
+set :application, "care-4-kids-auto-notifier"
 set :repo_url, "git@github.com:ctoec/care-4-kids-auto-notifier.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/care-4-kids-auto-notifier
-set :deploy_to, "/home/rails/railsapps/care-4-kids-auto-notifier-2"
+set :deploy_to, "/home/rails/railsapps/care-4-kids-auto-notifier"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
