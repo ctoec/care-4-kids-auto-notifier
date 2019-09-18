@@ -4,7 +4,9 @@
 # You can define all roles on a single server, or split them:
 
 set :rvm_custom_path, '/usr/share/rvm'
-server ENV.fetch "SERVER_USERNAME_IP", user: "rails", roles: %w{app db web}
+set :stage, :production
+set :rails_env, :production
+server ENV.fetch("SERVER_IP"), user: "rails", roles: %w{app db web}
 # server "db.", user: "deploy", roles: %w{db}
 
 
