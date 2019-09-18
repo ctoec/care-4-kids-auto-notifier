@@ -20,6 +20,6 @@
 # Learn more: http://github.com/javan/whenever
 
 # At minute 5 past every hour from 13 through 21 UTC.
-every '5 13-21 * * *' do
+every '5 * * * *' do
     runner "scripts/schedule_notifications.rb"
 end
