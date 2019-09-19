@@ -7,7 +7,7 @@ services:
     networks:
       - app
       - jobs
-  web:
+  app:
     build: .
     command: ./scripts/dev-start
     ports:
@@ -21,18 +21,6 @@ services:
      - app
      - jobs
      - docuclass
-    volumes:
-    - .:/app
-  jobs_runner:
-    build: .
-    command: bash -c "RAILS_ENV=${RAILS_ENV:-development} bin/delayed_job run"
-    env_file:
-      - ./.env
-    depends_on:
-      - db
-    networks: 
-      - app
-      - jobs
     volumes:
     - .:/app
   twilio_studio:
