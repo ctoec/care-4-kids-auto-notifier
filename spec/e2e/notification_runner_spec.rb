@@ -21,7 +21,7 @@ RSpec.describe 'Integration' do
     document_datetime = date + 1.minutes
     document_date = document_datetime.to_date
     document_time = document_datetime.strftime("%H:%M:%S")
-    lt = write_client.insert(
+     write_client.insert(
       doc_id: 1,
       typeId: SQLServerClient::FAX,
 
@@ -37,7 +37,7 @@ RSpec.describe 'Integration' do
       timeEntered: document_time,
     )
 
-    result = write_client.insert(
+    write_client.insert(
       doc_id: 2,
       typeId: SQLServerClient::EMAILS,
 
@@ -53,69 +53,19 @@ RSpec.describe 'Integration' do
       timeEntered: document_time
     )
 
-    result = write_client.insert(
-      doc_id: 3,
-      typeId: SQLServerClient::SCANS,
-
-      archivedAt: document_datetime,
-      deleted: nil,
-      client_id: case_id,
-      c17: '5551239876',
-      doc_type: 'RP - Redetermination',
-
-      instanceId: 3,
-
-      dateEntered: document_date,
-      timeEntered: document_time,
-    )
-
     Parent.create(caseid: case_id, cellphonenumber: cellphonenumber, active: true, notifications_generated_count: 1)
   end
 
-  context 'parent is active' do
-    it 'sends notifications' do
-      NotificationRunner.schedule_notifications(sender: FakeSender, scheduler: ImmediateScheduler)
-      expect(FakeSender.messages.size).to eq 3
-    end
-  end
-
-  context 'document received by fax' do
-    it 'message text is correctly formatted to use fax' do
-      NotificationRunner.schedule_notifications(sender: FakeSender, scheduler: ImmediateScheduler)
-      expect(FakeSender.messages[0]).to include(
-        <<-string.gsub(/\s+/, " ").strip
-          This is Care 4 Kids!
-          We have received your redetermination by fax on 01/01/2010.
-          You will be notified if there is any missing information.
-        string
-      )
-    end
-  end
-
-  context 'document received by email' do
-    it 'message text is correctly formatted to use web upload' do
-      NotificationRunner.schedule_notifications(sender: FakeSender, scheduler: ImmediateScheduler)
-      expect(FakeSender.messages[1]).to include(
-        <<-string.gsub(/\s+/, " ").strip
-          This is Care 4 Kids!
-          We have received your redetermination by web upload on 01/01/2010.
-          You will be notified if there is any missing information.
-        string
-      )
-    end
-  end
-
-  context 'document received by scan' do
-    it 'message text is correctly formatted to use mail' do
-      NotificationRunner.schedule_notifications(sender: FakeSender, scheduler: ImmediateScheduler)
-      expect(FakeSender.messages[2]).to include(
-        <<-string.gsub(/\s+/, " ").strip
-          This is Care 4 Kids!
-          We have received your redetermination by mail on 01/01/2010.
-          You will be notified if there is any missing information.
-        string
-      )
-    end
+  it 'sends notifications' do
+    NotificationRunner.schedule_notifications(sender: FakeSender, scheduler: ImmediateScheduler)
+    expect(FakeSender.messages.size).to eq 2
+    expect(FakeSender.messages[0]).to include(
+      <<-string.gsub(/\s+/, " ").strip
+        This is Care 4 Kids!
+        We have received your redetermination by fax on 01/01/2010.
+        You will be notified if there is any missing information.
+      string
+    )
   end
 
   after(:each) do
