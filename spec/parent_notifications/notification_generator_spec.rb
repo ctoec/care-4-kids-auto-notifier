@@ -71,13 +71,6 @@ RSpec.describe NotificationGenerator do
         notification_events = fetch_all_new notification_generator
         expect(notification_events.length).to eql 1
       end
-
-      describe 'message building' do
-        it 'correctly formats messages' do
-        end
-      
-      end
-
     end
 
     context 'there are multiple events that have corresponding active parents' do
