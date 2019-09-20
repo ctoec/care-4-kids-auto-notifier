@@ -10,7 +10,7 @@ A central precept of testing is that one shouldn't test code they don't own.
 ## Decision
 The team decided to create three surfaces in which work would intergrate at two points: United Way Database <--> Notification Generation <--> Notification Transmission.
 
-The touch point between United Way Database and Notification Generator is the `DocumentAssignedEvents` class.
+The touch point between United Way Database and Notification Generator is the `DocumentAssignedEventsRepository` class.
 The touch point between Notification Generator and Notification Transmission is the `NotificationQueue` class.
 
 `ActiveJob` and the `Twilio` client are wrapped in singleton classes, `NotificationSendJob` and `TwilioSender`, respectively, to ensure testability.

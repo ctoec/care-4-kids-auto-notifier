@@ -8,12 +8,12 @@ RSpec.describe NotificationGenerator do
       it 'returns a notification event with the correct case id' do
         time = Time.new(2010,1,1,0,0,0)
         caseid = (rand 100).to_s
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: [Parent.create(caseid: caseid, cellphonenumber: '+5555555555', active: true)],
           time: time
         )
 
-        notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
+        notification_generator = NotificationGenerator.new document_assigned_events_repository: document_assigned_events_repository
 
         notification_events = fetch_all_new notification_generator
         expect(notification_events.first.caseid).to eql caseid
@@ -22,14 +22,14 @@ RSpec.describe NotificationGenerator do
       it 'returns a notification event with a notification id that is linked stored notification with message text' do
         time = Time.new(2010,1,1,0,0,0)
         caseid = (rand 100).to_s
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: [
             Parent.create(caseid: caseid, cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1)
           ],
           time: time
         )
         notification_generator = NotificationGenerator.new(
-          document_assigned_events: document_assigned_events
+          document_assigned_events_repository: document_assigned_events_repository
         )
 
         notification_events = fetch_all_new notification_generator
@@ -40,14 +40,14 @@ RSpec.describe NotificationGenerator do
       it 'generates a message reminding the recipient of the instructions if they are receiving their first message' do
         caseid = (rand 100).to_s
         time = Time.new(2010,1,1,0,0,0)
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: [
             Parent.create(caseid: caseid, cellphonenumber: '+5555555555', active: true)
           ],
           time: time
         )
         notification_generator = NotificationGenerator.new(
-          document_assigned_events: document_assigned_events
+          document_assigned_events_repository: document_assigned_events_repository
         )
 
         notification_events = fetch_all_new notification_generator
@@ -58,32 +58,39 @@ RSpec.describe NotificationGenerator do
       it 'does not generate a message reminding the recipient of the instructions if they are not receiving their first message' do
         caseid = (rand 100).to_s
         time = Time.new(2010,1,1,0,0,0)
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: [
             Parent.create(caseid: caseid, cellphonenumber: '5555555555', active: true, notifications_generated_count: 1)
           ],
           time: time
         )
         notification_generator = NotificationGenerator.new(
-          document_assigned_events: document_assigned_events
+          document_assigned_events_repository: document_assigned_events_repository
         )
 
         notification_events = fetch_all_new notification_generator
         expect(notification_events.length).to eql 1
       end
+
+      describe 'message building' do
+        it 'correctly formats messages' do
+        end
+      
+      end
+
     end
 
     context 'there are multiple events that have corresponding active parents' do
       it 'returns all the notification events' do
         time = Time.new(2010,1,1,0,0,0)
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: [
             Parent.create(caseid: 'x', cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1),
             Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1)
           ],
           time: time
         )
-        notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
+        notification_generator = NotificationGenerator.new document_assigned_events_repository: document_assigned_events_repository
 
         notification_events = fetch_all_new notification_generator
         expect(notification_events.length).to eql 2
@@ -97,12 +104,12 @@ RSpec.describe NotificationGenerator do
         parents = [
           Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1)
         ]
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: parents,
           time: time
         )
 
-        notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
+        notification_generator = NotificationGenerator.new document_assigned_events_repository: document_assigned_events_repository
 
         notification_events = fetch_all_new notification_generator
         expect(notification_events.length).to eql 1
@@ -113,12 +120,12 @@ RSpec.describe NotificationGenerator do
       it 'returns no notification events' do
         caseid = (rand 100).to_s
         time = Time.new(2010,1,1,0,0,0)
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: [Parent.create(caseid: caseid, cellphonenumber: '+5555555555', active: false)],
           time: time
         )
 
-        notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
+        notification_generator = NotificationGenerator.new document_assigned_events_repository: document_assigned_events_repository
 
         notification_events = fetch_all_new notification_generator
         expect(notification_events.length).to eql 0
@@ -128,14 +135,14 @@ RSpec.describe NotificationGenerator do
     context 'there are multiple events that have corresponding inactive parents' do
       it 'returns no notification events' do
         time = Time.new(2010,1,1,0,0,0)
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: [
             Parent.create(caseid: 'x', cellphonenumber: '+5555555555', active: false),
             Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: false)
           ],
           time: time
         )
-        notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
+        notification_generator = NotificationGenerator.new document_assigned_events_repository: document_assigned_events_repository
 
         notification_events = fetch_all_new notification_generator
         expect(notification_events.length).to eql 0
@@ -149,12 +156,12 @@ RSpec.describe NotificationGenerator do
         parents = [
           Parent.create(caseid: 'y', cellphonenumber: '+5555555555', active: true, notifications_generated_count: 1)
         ]
-        document_assigned_events = build_document_assigned_events_stub(
+        document_assigned_events_repository= build_document_assigned_events_repo_stub(
           parents: parents,
           time: time
         )
 
-        notification_generator = NotificationGenerator.new document_assigned_events: document_assigned_events
+        notification_generator = NotificationGenerator.new document_assigned_events_repository: document_assigned_events_repository
 
         notification_events = fetch_all_new notification_generator
         expect(notification_events.length).to eql 1
@@ -169,11 +176,11 @@ def fetch_all_new(notification_generator)
   notification_events
 end
 
-def build_document_assigned_events_stub(parents:, time:)
-  document_assigned_events = double
+def build_document_assigned_events_repo_stub(parents:, time:)
+  document_assigned_events_repository= double
   events = parents.map do |parent|
     DocumentAssignedEvent.new(parent.caseid, 'some doc', 'fax', time)
   end
-  allow(document_assigned_events).to receive(:fetch_all_new).and_return events
-  document_assigned_events
+  allow(document_assigned_events_repository).to receive(:fetch_all_new).and_return events
+  document_assigned_events_repository
 end

@@ -6,5 +6,5 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# Setup for DocumentAssignedEvents, prevents
+# Setup for DocumentAssignedEventsRepository, prevents
 EventCursor.create(key: 'document_assigned_event', time: Time.now)
