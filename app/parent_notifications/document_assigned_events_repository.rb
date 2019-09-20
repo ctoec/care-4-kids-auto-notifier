@@ -2,7 +2,7 @@
 
 DocumentAssignedEvent = Struct.new(:caseid, :type, :source, :date)
 
-class DocumentAssignedEvents
+class DocumentAssignedEventsRepository
     @@client = TinyTds::Client.new(
       username: ENV.fetch('UNITEDWAYDB_USERNAME'),
       password: ENV.fetch('UNITEDWAYDB_PASSWORD'),

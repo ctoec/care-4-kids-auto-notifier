@@ -6,7 +6,7 @@ class NotificationRunner
             scheduler: scheduler
         )
         notification_generator = NotificationGenerator.new(
-            document_assigned_events: DocumentAssignedEvents
+            document_assigned_events_repository: DocumentAssignedEventsRepository
         )
         notification_manager = NotificationManager.new(
             message_queue: message_queue, notification_generator: notification_generator

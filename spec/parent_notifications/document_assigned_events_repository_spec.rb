@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'sqlserver_helper'
 
-RSpec.describe DocumentAssignedEvents do
+RSpec.describe DocumentAssignedEventsRepository do
   before(:all) do
     @write_client = SQLServerClient.new
     @write_client.setup_types_table
@@ -17,7 +17,7 @@ RSpec.describe DocumentAssignedEvents do
   describe 'fetch_all_new' do
     context 'there are no events' do
       it 'returns nothing' do
-        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+        expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 0
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe DocumentAssignedEvents do
           timeEntered: document_time,
         )
 
-        event = DocumentAssignedEvents.fetch_all_new.first
+        event = DocumentAssignedEventsRepository.fetch_all_new.first
         expect(event.caseid).to eql '1'
         expect(event.type).to eql 'redetermination'
         expect(event.source).to eql 'fax'
@@ -73,7 +73,7 @@ RSpec.describe DocumentAssignedEvents do
           timeEntered: document_time,
         )
 
-        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+        expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 0
       end
 
       it 'does not fetch events that are marked as deleted in documents table' do
@@ -98,7 +98,7 @@ RSpec.describe DocumentAssignedEvents do
           timeEntered: document_time,
         )
 
-        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+        expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 0
       end
 
       it 'does only fetch events that are faxes emails and scans in workflowsteps table' do
@@ -171,7 +171,7 @@ RSpec.describe DocumentAssignedEvents do
           timeEntered: document_time,
         )
 
-        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
+        expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 3
       end
     end
 
@@ -221,7 +221,7 @@ RSpec.describe DocumentAssignedEvents do
           timeEntered: later_future_time,
         )
 
-        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 2
+        expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 2
       end
     end
 
@@ -271,7 +271,7 @@ RSpec.describe DocumentAssignedEvents do
           timeEntered: earlier_time,
         )
 
-        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 1
+        expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 1
       end
 
       it 'does not fetch events again' do
@@ -330,8 +330,8 @@ RSpec.describe DocumentAssignedEvents do
           timeEntered: oldest_datetime.strftime("%H:%M:%S")
         )
 
-        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 3
-        expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+        expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 3
+        expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 0
       end
     end
   end
@@ -369,7 +369,7 @@ RSpec.describe DocumentAssignedEvents do
           timeEntered: document_time
         )
       end
-      expect(DocumentAssignedEvents.fetch_all_new.length).to eql counter
+      expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql counter
     end
   end
 
@@ -396,7 +396,7 @@ RSpec.describe DocumentAssignedEvents do
         timeEntered: document_time
       )
 
-      expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+      expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 0
     end
   end
 
@@ -423,7 +423,7 @@ RSpec.describe DocumentAssignedEvents do
         timeEntered: document_time
       )
 
-      expect(DocumentAssignedEvents.fetch_all_new.length).to eql 0
+      expect(DocumentAssignedEventsRepository.fetch_all_new.length).to eql 0
     end
   end
 end

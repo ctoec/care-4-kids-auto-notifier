@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class NotificationGenerator
-  def initialize(document_assigned_events:)
-    @document_assigned_events = document_assigned_events
+  def initialize(document_assigned_events_repository:)
+    @document_assigned_events_repository = document_assigned_events_repository
   end
 
   def fetch_all_new
-    @document_assigned_events.fetch_all_new.each do |event|
+    @document_assigned_events_repository.fetch_all_new.each do |event|
       found_parent = Parent.where(caseid: event.caseid).first
       if parent_is_active(found_parent)
         yield build_notification_event(event: event)
