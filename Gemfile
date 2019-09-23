@@ -20,6 +20,7 @@ gem "twilio-ruby", "~> 5.25"
 gem "daemons", "~> 1.3"
 gem "delayed_job_active_record", "~> 4.1.4"
 gem 'whenever'
+gem 'httparty'
 
 
 # Reduces boot times through caching; required in config/boot.rb

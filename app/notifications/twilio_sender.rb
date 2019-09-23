@@ -15,5 +15,12 @@ class TwilioSender
       to: "+1#{to_number}",
       body: message_text
     )
+
+    begin
+      HTTParty.post(ENV.fetch('SLACK_WEBHOOK'), body: '{"text":"A notification has been sent! Yay!"}')
+    rescue
+      Rails.logger.error e
+    end
+
   end
 end

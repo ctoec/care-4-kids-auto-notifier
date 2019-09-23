@@ -24,6 +24,7 @@ TWILIO_ACCOUNT_SID=<Account SID>
 TWILIO_AUTH_TOKEN=<Auth Token>
 SECRET_KEY_BASE=$(cat /dev/random | dd ibs=10 count=1 status=none | base64)
 SERVER_IP="See production deploy section"
+SLACK_WEBHOOK="for slack notifications"
 EOF
 ```
 
