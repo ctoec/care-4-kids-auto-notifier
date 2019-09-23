@@ -3,13 +3,13 @@
 class NotificationSendJob < ApplicationJob
   queue_as :default
 
-  retry_on StandardError, attempts: 1 do |job, error|
+  retry_on Twilio::REST::TwilioError, attempts: 1 do |job, error|
     notification_event = job.get_notification_event
     caseid = notification_event.caseid
     notificationid = notification_event.notificationid
     parent = Parent.find_by!(caseid: caseid)
     
-    is_success = FailedJob.create(jobid: job.job_id, notification_id: notificationid, parent_id: parent.id)
+    is_success = FailedJob.create(jobid: job.job_id, notification_id: notificationid, parent_id: parent.id, error_message: error.message)
     Rails.logger.error( 
       "Could not create failed job record. Notification ID: #{notificationid}, Case ID: #{caseid}"
     ) unless is_success

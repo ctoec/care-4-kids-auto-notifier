@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2019_09_24_130522) do
     t.bigint "parent_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "error_message"
     t.index ["notification_id"], name: "index_failed_jobs_on_notification_id"
     t.index ["parent_id"], name: "index_failed_jobs_on_parent_id"
   end

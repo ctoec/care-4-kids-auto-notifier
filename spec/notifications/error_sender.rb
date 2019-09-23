@@ -1,5 +1,5 @@
 class ErrorSender
   def self.createMessage(*vargs)
-    raise StandardError
+    raise Twilio::REST::TwilioError
   end
 end
