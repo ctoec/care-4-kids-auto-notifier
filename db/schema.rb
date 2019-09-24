@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_16_185639) do
+ActiveRecord::Schema.define(version: 2019_09_24_130522) do
 
   create_table "delayed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -60,6 +60,8 @@ ActiveRecord::Schema.define(version: 2019_09_16_185639) do
     t.string "caseid"
     t.boolean "active", default: false, null: false
     t.integer "notifications_generated_count", default: 0, null: false
+    t.index ["caseid"], name: "index_parents_on_caseid", unique: true
+    t.index ["encrypted_cellphonenumber"], name: "index_parents_on_encrypted_cellphonenumber", unique: true
   end
 
   add_foreign_key "failed_jobs", "notifications"
