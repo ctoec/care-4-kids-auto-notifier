@@ -33,10 +33,10 @@ RSpec.describe NotificationSendJob do
       message_text = 'This is a message'
       cellphonenumber = '2345678900'
       caseid = rand(100).to_s
-      error_message = 'Fake error message'
+      raised_error = Twilio::REST::RestError.new('Fake error message', Twilio::Response.new(500, ''))
 
       sender = double
-      allow(sender).to receive(:createMessage).and_raise(Twilio::REST::TwilioError.new(error_message))
+      allow(sender).to receive(:createMessage).and_raise(raised_error)
 
       parent = Parent.create(caseid: caseid, cellphonenumber: cellphonenumber)
       notification = Notification.create(message_text: message_text)
@@ -53,7 +53,7 @@ RSpec.describe NotificationSendJob do
       expect(failed_job.notification).to eq notification
       expect(failed_job.parent).to eq parent
       expect(failed_job.jobid).to eq job.job_id
-      expect(failed_job.error_message).to eq error_message
+      expect(failed_job.error_code).to eq raised_error.code
     end
   end
 

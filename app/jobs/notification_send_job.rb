@@ -3,7 +3,7 @@
 class NotificationSendJob < ApplicationJob
   queue_as :default
 
-  retry_on Twilio::REST::TwilioError, attempts: 1 do |job, error|
+  retry_on Twilio::REST::RestError, attempts: 1 do |job, error|
     notification_event = job.get_notification_event
     caseid = notification_event.caseid
     notificationid = notification_event.notificationid
