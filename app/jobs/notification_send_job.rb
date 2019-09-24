@@ -9,7 +9,13 @@ class NotificationSendJob < ApplicationJob
     notificationid = notification_event.notificationid
     parent = Parent.find_by!(caseid: caseid)
     
-    is_success = FailedJob.create(jobid: job.job_id, notification_id: notificationid, parent_id: parent.id, error_message: error.message)
+    is_success = FailedJob.create(
+      jobid: job.job_id,
+      notification_id: notificationid,
+      parent_id: parent.id,
+      error_message: error.message,
+      error_code: error.code
+    )
     Rails.logger.error( 
       "Could not create failed job record. Notification ID: #{notificationid}, Case ID: #{caseid}"
     ) unless is_success

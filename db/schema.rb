@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_24_130522) do
+ActiveRecord::Schema.define(version: 2019_09_24_211935) do
 
   create_table "delayed_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2019_09_24_130522) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "error_message"
+    t.integer "error_code"
     t.index ["notification_id"], name: "index_failed_jobs_on_notification_id"
     t.index ["parent_id"], name: "index_failed_jobs_on_parent_id"
   end
