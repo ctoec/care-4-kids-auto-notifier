@@ -2,8 +2,6 @@
 
 require 'rails_helper'
 
-require_relative '../notifications/error_sender'
-
 RSpec.describe NotificationSendJob do
   include ActiveJob::TestHelper
 
@@ -69,9 +67,9 @@ RSpec.describe NotificationSendJob do
       notification_event = NotificationEvent.new(caseid, notification.id)
 
       # This is equivalent to
-      # NotificationSendJob.set(wait: 3.seconds).peform_later(ErrorSender, notification_event)
+      # NotificationSendJob.set(wait: 3.seconds).peform_later(TwilioRestErrorSender, notification_event)
       # Constructing it this way allows us to inspect the job object for the id
-      job = NotificationSendJob.new(ErrorSender, notification_event)
+      job = NotificationSendJob.new(TwilioRestErrorSender, notification_event)
       perform_enqueued_jobs do
         job.enqueue wait: 3.seconds
       end
@@ -84,5 +82,11 @@ RSpec.describe NotificationSendJob do
       expect(failed_job.parent).to eq parent
       expect(failed_job.jobid).to eq job.job_id
     end
+  end
+end
+
+class TwilioRestErrorSender
+  def self.createMessage(*vargs)
+    raise Twilio::REST::RestError.new('Fake error message', Twilio::Response.new(500, ''))
   end
 end
