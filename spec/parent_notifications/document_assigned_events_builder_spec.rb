@@ -65,7 +65,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
           { 'ClientID' => 1,
             'DocType' => doc_type,
             'Source' => 'Fax',
-            'ExportDate' => Time.now.strftime('%Y-%m-%d %H:%M') }
+            'ExportDate' => Time.now.strftime('%Y-%m-%d') }
         )
       end
       expect(parsed_documents.map(&:type)).to eq [
