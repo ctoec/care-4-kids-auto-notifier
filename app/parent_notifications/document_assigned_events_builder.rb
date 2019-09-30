@@ -6,7 +6,7 @@ class DocumentAssignedEventsBuilder
       self.parse_client_id(row),
       self.parse_doc_type(row),
       self.parse_source(row),
-      self.parse_datetime(row)
+      self.parse_date(row)
     )
   end
 
@@ -60,9 +60,9 @@ class DocumentAssignedEventsBuilder
     end
   end
 
-  def self.parse_datetime(row)
-    raise InvalidDocuclassDataTypeError.new("Missing Key: ArchivedAt") unless row.key?('ArchivedAt')
+  def self.parse_date(row)
+    raise InvalidDocuclassDataTypeError.new("Missing Key: ExportDate") unless row.key?('ExportDate')
 
-    row['ArchivedAt']
+    row['ExportDate']
   end
 end

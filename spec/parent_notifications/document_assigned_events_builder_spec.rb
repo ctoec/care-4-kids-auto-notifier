@@ -5,41 +5,41 @@ RSpec.describe DocumentAssignedEventsBuilder do
       'ClientID' => random_number,
       'DocType' => 'RP - Redetermination',
       'Source' => 'Fax',
-      'ArchivedAt' => Time.now.strftime('%Y-%m-%d %H:%M')
+      'ExportDate' => Time.now.strftime('%Y-%m-%d')
     }
     document_assigned_event = DocumentAssignedEventsBuilder.parse_row(row)
     expect(document_assigned_event.caseid).to equal random_number
   end
 
   it 'extracts the archived at date' do
-    date = Time.now.strftime('%Y-%m-%d %H:%M')
+    date = Time.now.strftime('%Y-%m-%d')
     row = {
       'ClientID' => 1,
       'DocType' => 'RP - Redetermination',
       'Source' => 'Fax',
-      'ArchivedAt' => date
+      'ExportDate' => date
     }
     document_assigned_event = DocumentAssignedEventsBuilder.parse_row(row)
     expect(document_assigned_event.date).to equal date
   end
 
   it 'raises error if all keys do not exist' do
-    date = Time.now.strftime('%Y-%m-%d %H:%M')
+    date = Time.now.strftime('%Y-%m-%d')
     [
       {
         'DocType' => 'RP - Redetermination',
         'Source' => 'Fax',
-        'ArchivedAt' => date
+        'ExportDate' => date
       },
       {
         'ClientID' => 1,
         'Source' => 'Fax',
-        'ArchivedAt' => date
+        'ExportDate' => date
       },
       {
         'ClientID' => 1,
         'DocType' => 'RP - Redetermination',
-        'ArchivedAt' => date
+        'ExportDate' => date
       },
       {
         'ClientID' => 1,
@@ -65,7 +65,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
           { 'ClientID' => 1,
             'DocType' => doc_type,
             'Source' => 'Fax',
-            'ArchivedAt' => Time.now.strftime('%Y-%m-%d %H:%M') }
+            'ExportDate' => Time.now.strftime('%Y-%m-%d %H:%M') }
         )
       end
       expect(parsed_documents.map(&:type)).to eq [
@@ -83,7 +83,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
         'ClientID' => random_number,
         'DocType' => 'Invalid',
         'Source' => 'Fax',
-        'ArchivedAt' => Time.now.strftime('%Y-%m-%d %H:%M')
+        'ExportDate' => Time.now.strftime('%Y-%m-%d')
       }
       expect { DocumentAssignedEventsBuilder.parse_row(row) }.to raise_error InvalidDocuclassDataTypeError
     end
@@ -93,7 +93,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
     it 'extracts and transforms all doc sources' do
       parsed_documents = ['Fax', 'Emails', 'Scans'].map do |source|
         DocumentAssignedEventsBuilder.parse_row(
-          { 'ClientID' => 1, 'DocType' => 'RP - Redetermination', 'Source' => source, 'ArchivedAt' => Time.now.strftime('%Y-%m-%d %H:%M') }
+          { 'ClientID' => 1, 'DocType' => 'RP - Redetermination', 'Source' => source, 'ExportDate' => Time.now.strftime('%Y-%m-%d') }
         )
       end
       expect(parsed_documents.map(&:source)).to eq ['fax', 'web upload', 'mail']
@@ -105,7 +105,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
         'ClientID' => random_number,
         'DocType' => 'RP - Redetermination',
         'Source' => 'Invalid',
-        'ArchivedAt' => Time.now.strftime('%Y-%m-%d %H:%M')
+        'ExportDate' => Time.now.strftime('%Y-%m-%d')
       }
       expect { DocumentAssignedEventsBuilder.parse_row(row) }.to raise_error InvalidDocuclassDataTypeError
     end

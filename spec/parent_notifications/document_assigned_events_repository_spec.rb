@@ -25,7 +25,7 @@ RSpec.describe DocumentAssignedEventsRepository do
       it 'fetches one event with the correct format' do
         EventCursor.document_assigned_events_cursor = Time.now
 
-        document_datetime = Time.now + 1.minutes
+        document_datetime = Time.now + 1.days
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
         result = @write_client.insert(
@@ -48,7 +48,7 @@ RSpec.describe DocumentAssignedEventsRepository do
         expect(event.caseid).to eql '1'
         expect(event.type).to eql 'redetermination'
         expect(event.source).to eql 'fax'
-        expect(event.date.strftime('%Y-%m-%d %H:%M:00')).to eql document_datetime.strftime('%Y-%m-%d %H:%M:00')
+        expect(event.date.to_date).to eql document_date
       end
 
       it 'does not fetch events that have a deleted type' do
@@ -104,7 +104,7 @@ RSpec.describe DocumentAssignedEventsRepository do
       it 'does only fetch events that are faxes emails and scans in workflowsteps table' do
         EventCursor.document_assigned_events_cursor = Time.now
 
-        document_datetime = Time.now + 1.minutes
+        document_datetime = Time.now + 1.days
         document_date = document_datetime.to_date
         document_time = document_datetime.strftime("%H:%M:%S")
         result = @write_client.insert(
@@ -179,11 +179,11 @@ RSpec.describe DocumentAssignedEventsRepository do
       it 'fetches all events' do
         current_datetime = Time.now
 
-        future_datetime = current_datetime + 1.minutes
+        future_datetime = current_datetime + 1.days
         future_date = future_datetime.to_date
         future_time = future_datetime.strftime("%H:%M:%S")
 
-        later_future_datetime = future_datetime + 1.minutes
+        later_future_datetime = future_datetime + 1.days
         later_future_date = later_future_datetime.to_date
         later_future_time = later_future_datetime.strftime("%H:%M:%S")
 
@@ -229,11 +229,11 @@ RSpec.describe DocumentAssignedEventsRepository do
       it 'fetches only the events that happened after cursor date' do
         current_datetime = Time.now
 
-        future_datetime = current_datetime + 1.minutes
+        future_datetime = current_datetime + 1.days
         future_date = future_datetime.to_date
         future_time = future_datetime.strftime("%H:%M:%S")
 
-        earlier_datetime = current_datetime - 1.minutes
+        earlier_datetime = current_datetime - 1.days
         earlier_date = earlier_datetime.to_date
         earlier_time = earlier_datetime.strftime("%H:%M:%S")
 
@@ -275,7 +275,7 @@ RSpec.describe DocumentAssignedEventsRepository do
       end
 
       it 'does not fetch events again' do
-        EventCursor.document_assigned_events_cursor = Time.now - 1.hour
+        EventCursor.document_assigned_events_cursor = Time.now - 1.days
 
         current_datetime = Time.now
         old_datetime = current_datetime - 10.minutes
