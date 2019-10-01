@@ -46,12 +46,12 @@ class DocumentAssignedEventsBuilder
     raise InvalidDocuclassDataTypeError.new("Missing Key: Source") unless row.key?('Source')
 
     source = row['Source']
-    if (!['Fax', 'Emails', 'Scans'].include?(source))
+    if (!['Faxes', 'Emails', 'Scans'].include?(source))
       raise InvalidDocuclassDataTypeError.new("Invalid Source: #{source}")
     end
 
     case source
-    when 'Fax'
+    when 'Faxes'
       'fax'
     when 'Emails'
       'web upload'

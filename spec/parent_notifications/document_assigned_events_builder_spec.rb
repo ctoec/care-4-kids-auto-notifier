@@ -4,7 +4,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
     row = {
       'ClientID' => random_number,
       'DocType' => 'RP - Redetermination',
-      'Source' => 'Fax',
+      'Source' => 'Faxes',
       'ExportDate' => Time.now.strftime('%Y-%m-%d')
     }
     document_assigned_event = DocumentAssignedEventsBuilder.parse_row(row)
@@ -16,7 +16,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
     row = {
       'ClientID' => 1,
       'DocType' => 'RP - Redetermination',
-      'Source' => 'Fax',
+      'Source' => 'Faxes',
       'ExportDate' => date
     }
     document_assigned_event = DocumentAssignedEventsBuilder.parse_row(row)
@@ -28,23 +28,23 @@ RSpec.describe DocumentAssignedEventsBuilder do
     [
       {
         'DocType' => 'RP - Redetermination',
-        'Source' => 'Fax',
+        'Source' => 'Faxes',
         'ExportDate' => date
       },
       {
         'ClientID' => 1,
-        'Source' => 'Fax',
-        'ExportDate' => date
-      },
-      {
-        'ClientID' => 1,
-        'DocType' => 'RP - Redetermination',
+        'Source' => 'Faxes',
         'ExportDate' => date
       },
       {
         'ClientID' => 1,
         'DocType' => 'RP - Redetermination',
-        'Source' => 'Fax',
+        'ExportDate' => date
+      },
+      {
+        'ClientID' => 1,
+        'DocType' => 'RP - Redetermination',
+        'Source' => 'Faxes',
       }
     ].each do |broken_row|
       expect { DocumentAssignedEventsBuilder.parse_row(broken_row) }.to raise_error InvalidDocuclassDataTypeError
@@ -64,7 +64,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
         DocumentAssignedEventsBuilder.parse_row(
           { 'ClientID' => 1,
             'DocType' => doc_type,
-            'Source' => 'Fax',
+            'Source' => 'Faxes',
             'ExportDate' => Time.now.strftime('%Y-%m-%d') }
         )
       end
@@ -82,7 +82,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
       row = {
         'ClientID' => random_number,
         'DocType' => 'Invalid',
-        'Source' => 'Fax',
+        'Source' => 'Faxes',
         'ExportDate' => Time.now.strftime('%Y-%m-%d')
       }
       expect { DocumentAssignedEventsBuilder.parse_row(row) }.to raise_error InvalidDocuclassDataTypeError
@@ -91,7 +91,7 @@ RSpec.describe DocumentAssignedEventsBuilder do
 
   context 'doc sources' do
     it 'extracts and transforms all doc sources' do
-      parsed_documents = ['Fax', 'Emails', 'Scans'].map do |source|
+      parsed_documents = ['Faxes', 'Emails', 'Scans'].map do |source|
         DocumentAssignedEventsBuilder.parse_row(
           { 'ClientID' => 1, 'DocType' => 'RP - Redetermination', 'Source' => source, 'ExportDate' => Time.now.strftime('%Y-%m-%d') }
         )

@@ -34,7 +34,7 @@ class SQLServerClient
              TypeName
            ) VALUES (
              #{FAX},
-             "Fax"
+             "Faxes"
            );
            INSERT INTO types (
              idTypes,
