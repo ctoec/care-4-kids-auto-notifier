@@ -4,7 +4,8 @@
 # You can define all roles on a single server, or split them:
 
 set :repo_url, "https://github.com/ctoec/care-4-kids-auto-notifier.git"
-set :deploy_to, "~/Code/dev-c4k-deploy"
+set :deploy_to, "/home/melanie/Code/dev-c4k-deploy"
+set :format_options, command_output: true, log_file: "/home/melanie/Code/dev-c4k-deploy/log/capistrano.log", color: :auto, truncate: :auto
 
 # set :rvm_custom_path, '/usr/share/rvm'
 set :stage, :development
