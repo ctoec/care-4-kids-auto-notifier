@@ -6,7 +6,7 @@
 set :rvm_custom_path, '/usr/share/rvm'
 set :stage, :production
 set :rails_env, :production
-server ENV.fetch("SERVER_IP"), user: "rails", roles: %w{app db web}
+server ENV.fetch("SERVER_IP"), user: "rails", roles: %w{app db web}, password: ENV.fetch("SERVER_PASSWORD")
 # server "db.", user: "deploy", roles: %w{db}
 
 
