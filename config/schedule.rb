@@ -25,5 +25,5 @@ every '0 19 * * *' do
 end
 
 every '40 12 * * 1-4' do
-  runner 'scripts/automate_deployment'
+  command 'scripts/automate_deployment'
 end
