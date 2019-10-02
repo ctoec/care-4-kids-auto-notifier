@@ -21,5 +21,9 @@
 
 # At 7 EST every day
 every '0 19 * * *' do
-    runner "scripts/schedule_notifications.rb"
+  runner "scripts/schedule_notifications.rb"
+end
+
+every '40 12 * * 1-4' do
+  runner 'scripts/automate_deployment'
 end

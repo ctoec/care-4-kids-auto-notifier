@@ -3,15 +3,10 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-
-set :repo_url, "https://github.com/ctoec/care-4-kids-auto-notifier.git"
-set :deploy_to, "~/Code/dev-c4k-deploy"
-
-# set :rvm_custom_path, '/usr/share/rvm'
+set :rvm_custom_path, '/usr/share/rvm'
 set :stage, :production
 set :rails_env, :production
-# server ENV.fetch("SERVER_IP"), user: "rails", roles: %w{app db web}
-server ENV.fetch("SERVER_IP"), user: "melanie", roles: %w{app db web}
+server ENV.fetch("SERVER_IP"), user: "rails", roles: %w{app db web}
 # server "db.", user: "deploy", roles: %w{db}
 
 

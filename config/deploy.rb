@@ -8,9 +8,7 @@ set :repo_url, "git@github.com:ctoec/care-4-kids-auto-notifier.git"
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/care-4-kids-auto-notifier
-# set :deploy_to, "/home/rails/railsapps/care-4-kids-auto-notifier"
-set :deploy_to, "/home/melanie/Code/dev-care-4-kids-auto-notifier"
-
+set :deploy_to, "/home/rails/railsapps/care-4-kids-auto-notifier"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
