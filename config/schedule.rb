@@ -25,5 +25,5 @@ every '0 19 * * *' do
 end
 
 every '40 12 * * 1-4' do
-  command 'scripts/automate_deployment'
+  command 'cd && bash /home/rails/railsapps/care-4-kids-auto-notifier/current/scripts/automate_deployment'
 end
