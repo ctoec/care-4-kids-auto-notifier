@@ -10,7 +10,7 @@ gem 'mysql2'
 # Use tiny_tds for connecting to sqlserver
 gem 'tiny_tds'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 3.12'
 gem 'dotenv-rails'
 # Use attr_encrypted to provide encryption at rest
 gem "attr_encrypted", "~> 3.1.0"
